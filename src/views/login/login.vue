@@ -2,12 +2,13 @@
   <el-row class="login" id='vantaRef'>
               <el-col id="main"  :offset="2" :span="16">
                 <el-col :span="7" id="main-nav">
-                              <button @click="isShow">
-                                点我
-                              </button>
+                  <h5> 其他登陆方式 </h5>
+                  <i class="el-icon-message"></i>
+                  <i class="el-icon-mobile-phone"></i>
+                  <button @click="isShow">点我 </button>
                 </el-col>
                 <el-col :span="17">
-                  <el-col v-if="this.flag" id="form-main" :offset="4"  :span="16">
+                  <el-col v-if="this.flag"  class="animate__animated  animate__fadeInRight" id="form-main" :offset="4"  :span="16">
                     <el-form  ref="loginForm" :model="user" :rules="rules" status-icon label-width="80px">
                       <el-form-item prop="username" label="用户名" style="padding: 5px">
                         <el-input v-model="user.username" placeholder="请输入用户名" prefix-icon></el-input>
@@ -28,13 +29,19 @@
                       </el-form-item>
                     </el-form>
                   </el-col>
-                  <el-col v-if="!this.flag" id="form-main" :offset="4"  :span="16">
-                    <el-form  ref="loginForm" :model="user" :rules="rules" status-icon label-width="80px">
-                      <el-form-item prop="username" label="用户名" style="padding: 5px">
-                        <el-input v-model="user.username" placeholder="请输入用户名" prefix-icon></el-input>
+                  <el-col v-if="!this.flag" class="animate__animated  animate__fadeInRight"
+                          id="form-main" :offset="4"  :span="16">
+                    <el-form  ref="loginForm" :model="message" :rules="rules" status-icon label-width="80px">
+                      <el-form-item prop="phoneNumber" label="手机号" style="padding: 5px">
+                        <el-input v-model="message.phoneNumber" placeholder="请输入手机号" prefix-icon=""></el-input>
                       </el-form-item>
-                      <el-form-item id="password" prop="password" label="密码" style="margin-top: 35px">
-                        <el-input v-model="user.password" show-password placeholder="请输入密码"></el-input>
+                      <el-form-item id="password" prop="e_code" label="验证码" style="margin-top: 35px">
+                        <el-input  v-model="message.e_code"  placeholder="请输入验证码">
+                          <i slot="suffix"  @click="getCode" style="font-size: smaller">获取验证码...</i>
+                        </el-input>
+                      </el-form-item>
+                      <el-form-item >
+                        <el-checkbox v-model="message.rememberMe">记住我</el-checkbox>
                       </el-form-item>
                       <el-form-item>
                         <router-link  to="/">找回密码</router-link>
@@ -64,15 +71,25 @@ import CLOUDS from 'vanta/src/vanta.clouds'
 export default {
   name: "login",
   data() {
+    let validateAgree = (rule, value, callback) => {
+      if (value) {
+        console.log("表单校验： ",value)
+        callback()
+      } else {
+        callback(new Error('请勾选同意协议'))
+      }
+    }
     return {
       flag: true,
       user: {
         username: "",
-        password: ""
+        password: "",
+        rememberMe:true
       },
       message:{
         phoneNumber:"",
-        e_code:""
+        e_code:"",
+        rememberMe:true,
       },
       rules: {
         username: [
@@ -82,6 +99,14 @@ export default {
         password: [
           {required: true, message: '请输入密码...', trigger: 'blur'},
           {min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur'}
+        ],
+        phoneNumber: [
+          {required:true,message:'请输入手机号...',trigger:'blur'},
+          { min: 11, max: 11, message: '请输入11位手机号码', trigger: 'blur' },
+          {pattern: /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/,message: '请输入正确的手机号码'}
+        ],
+        rememberMe:[
+          {validator: validateAgree, trigger: 'change' }
         ]
       }
     };
@@ -131,7 +156,10 @@ export default {
      this.user="";
     },
     isShow(){
-      return  !this.flag;
+      this.flag=  !this.flag;
+    },
+    getCode(){
+    this.$message("获取验证码中》》》》》")
     }
   }
 };

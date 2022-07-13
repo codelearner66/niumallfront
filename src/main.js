@@ -5,6 +5,9 @@ import store from './store'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import axios from 'axios'
+//简单动画
+import 'animate.css/animate.min.css'
+
 Vue.config.errorHandler=function (err) {
   console.log("global", err);
   message.error("出错了");
