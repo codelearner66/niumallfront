@@ -18,7 +18,7 @@ export default new Vuex.Store({
     getIsLogin(state){
       let token = Cookies.get("token");
       console.log("stote中的token： ",token)
-      return state.islogin||(token!=undefined&&token.length!=0);
+      return state.islogin||(token!=undefined&&token.length!=0&&token!='');
     }
   },
   actions: {

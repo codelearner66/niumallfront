@@ -1,8 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-import Cookies from "js-cookie";
-import {postRequest} from "@/apis/api";
 import store from '@/store/index'; //直接导入store对象
 
 Vue.use(VueRouter)
@@ -43,6 +41,15 @@ const routes = [
             requiresAuth: false
         },
         component: () => import(/*webpackChunkName: "register"*/'../views/login/register')
+    },
+    {
+      path: '/findPassword',
+      name : 'findPassword'  ,
+        meta: {
+          title: "找回密码",
+            requiresAuth: false
+        },
+        component: ()=>import(/*webpackChunkName: "register"*/'../views/login/findpassword')
     },
     {
         path: "/404",

@@ -8,7 +8,7 @@ axios.defaults.withCredentials = true;
 // 使用自定义配置新建一个 axios 实例
 const service = axios.create({
     // 基础的请求地址
-    baseURL: 'http://localhost:8081/',
+    baseURL: 'http://localhost:8081',
     // 设置超时时间 5s
     timeout: 5000
 });
@@ -55,12 +55,14 @@ service.interceptors.response.use(success => {
 // 请求拦截器，例如请求的时候在头部加上请求的token
 service.interceptors.request.use(config => {
     if (localStorage.getItem('token')) {
+        let url = config.url;
+        //console.log("发起请求的路径",url);
         config.headers.ACCESS_TOKEN = localStorage.getItem('token');
     }
     return config;  //  有且必须有一个config对象被返回
 }, error => {
     //   对请求错误做些什么
-    console.log(error);
+   // console.log(error);
     return Promise.reject();
 });
 

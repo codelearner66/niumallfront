@@ -81,8 +81,6 @@ export default {
       }).then(() => {
         postRequest("/logout", {}).then(response => {
           if (response.code == 200) {
-            Cookies.remove("token");
-            this.$store.commit('noLogin')
             this.$message({
               showClose: true,
               type:"success",
@@ -92,6 +90,11 @@ export default {
           } else {
             Message.error("登出发生错误");
           }
+          this.$store.commit('noLogin')
+          Cookies.remove("token");
+          localStorage.removeItem("token");
+          window.location.reload();
+         // router.push("/login");
         })
       }).catch(() => {
         this.$message({
@@ -100,9 +103,7 @@ export default {
         });
       })
     }
-  },
-  created() {
-  },
+  }
 }
 </script>
 
