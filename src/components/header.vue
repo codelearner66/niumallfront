@@ -6,7 +6,7 @@
     <el-col :offset="3"   :span="18" id="header">
       <el-col :span="2">
         <router-link to="/" class="router-header">
-          <i class="el-icon-s-home"/>&nbsp;<span class="headerspan">首页</span>
+          &nbsp;<span class="headerspan"><i class="el-icon-s-home" style="color: hotpink"/>首页</span>
         </router-link>
       </el-col>
       <el-col :span="3">
@@ -41,7 +41,7 @@
       </el-col>
       <el-col :span="2">
         <router-link to="/myInfor" class="router-header">
-          <span class="headerspan"> <i class="el-icon-s-comment" style="color: hotpink"></i> 消息</span>
+          <el-badge :value="12" class="headerspan"> <i class="el-icon-s-comment" style="color: hotpink"></i> 消息</el-badge>
         </router-link>
       </el-col>
       <el-col :span="2">
