@@ -16,6 +16,15 @@ const routes = [
         component: Home
     },
     {
+        path: "/Category/:pid",
+        name: 'Category',
+        meta: {
+            title: '商品分类',
+            requiresAuth: false
+        },
+        component: ()=> import('../views/goodsList/CategoryGoods')
+    },
+    {
         path: '/about',
         name: 'About',
         meta: {
