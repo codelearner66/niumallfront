@@ -19,7 +19,7 @@
               <el-input v-model="user.rePassword" show-password placeholder="请再次输入密码..."></el-input>
             </el-form-item>
             <el-form-item>
-              <router-link  to="/">找回密码</router-link>
+              <router-link to="/findPassword">找回密码</router-link>
               |
               <router-link to="/login">去登陆</router-link>
             </el-form-item>
@@ -37,11 +37,8 @@
 
 <script>
 import {postRequest} from "@/apis/api";
-import Cookies from "js-cookie";
-import store from "@/store";
 import router from "@/router";
-import * as THREE from "three";
-import CLOUDS from 'vanta/src/vanta.clouds'
+
 export default {
   name: "register",
   data() {

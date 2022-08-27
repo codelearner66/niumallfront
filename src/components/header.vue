@@ -25,12 +25,12 @@
         </el-button>
       </el-col>
       <el-col :offset="this.$store.getters.getIsLogin?5:2" :span="2">
-        <router-link to="/myInfor" class="router-header" type="text">
+        <router-link to="/myInfo" class="router-header" type="text">
           <span class="headerspan"><i class="el-icon-user" style="color: hotpink"/> 我的信息</span>
         </router-link>
       </el-col>
       <el-col :span="2">
-        <router-link to="/myInfor" class="router-header">
+        <router-link to="/shopCartList" class="router-header">
           <i class="el-icon-shopping-cart-2" style="color: hotpink"></i> <span class="headerspan">购物车</span>
         </router-link>
       </el-col>

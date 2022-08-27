@@ -7,8 +7,8 @@
       </router-link>
     </el-col>
     <el-col :span="15">
-      <el-input type="search"  placeholder="搜索心仪的商品" style="border-radius: 7px">
-        <i slot="suffix"  class="el-icon-search" style="margin-top: 13px;margin-bottom: 10px" @click="handleClick"/>
+      <el-input type="search" v-model="key" @change="handleClick" placeholder="搜索心仪的商品" style="border-radius: 7px">
+        <i slot="suffix" class="el-icon-search" style="margin-top: 13px;margin-bottom: 10px" @click="handleClick"/>
       </el-input>
     </el-col>
   </el-col>
@@ -18,9 +18,18 @@
 <script>
 export default {
   name: "search",
-  methods:{
-    handleClick(){
-      alert("点击了搜索！")
+  data() {
+    return {
+      key: ''
+    }
+  },
+  methods: {
+    handleClick() {
+      if (this.key !== "" && this.key !== undefined) {
+        this.$router.push({path: '/goods/' + this.key})
+      } else {
+        this.$message("输入的关键词不合法...");
+      }
     }
   }
 }

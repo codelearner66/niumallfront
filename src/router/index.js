@@ -22,16 +22,43 @@ const routes = [
             title: '商品分类',
             requiresAuth: false
         },
-        component: ()=> import('../views/goodsList/CategoryGoods')
+        component: () => import('../views/goodsList/CategoryGoods')
     },
     {
-        path: '/about',
-        name: 'About',
+        path: "/goods/:key",
+        name: "goodsByKey",
         meta: {
-            title: "关于",
+            title: '搜索商品',
+            requiresAuth: false
+        },
+        component: () => import('../views/goodsList/CategoryGoodsByKey')
+    },
+    {
+        path: '/goodsDetails/:id',
+        name: 'goodsDetails',
+        meta: {
+            title: "商品详情",
             requiresAuth: true
         },
-        component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+        component: () => import(/* webpackChunkName: "about" */ '../views/goods/goodsDetails')
+    },
+    {
+        path: '/shopCartList',
+        name: 'shopCartList',
+        meta: {
+            title: '购物车',
+            requiresAuth: true
+        },
+        component: () => import('../views/shopCart/shopCartList')
+    },
+    {
+        path: '/myInfo',
+        name: 'myInfo',
+        meta: {
+            title: '我的信息',
+            requiresAuth: true
+        },
+        component: () => import('../views/myInfo/myInfo')
     },
     {
         path: "/login",
@@ -43,6 +70,15 @@ const routes = [
         component: () => import(/*webpackChunkName: "login"*/'../views/login/login')
     },
     {
+        path: "/success",
+        name: 'success',
+        meta: {
+            title: "支付成功",
+            requiresAuth: false
+        },
+        component: () => import(/*webpackChunkName: "login"*/'../views/goods/success')
+    },
+    {
         path: "/register",
         name: "register",
         meta: {
@@ -52,7 +88,7 @@ const routes = [
         component: () => import(/*webpackChunkName: "register"*/'../views/login/register')
     },
     {
-      path: '/findPassword',
+        path: '/findPassword',
       name : 'findPassword'  ,
         meta: {
           title: "找回密码",
@@ -96,16 +132,6 @@ router.beforeEach((to, from, next) => {
         if(islogin){
             next();
         }
-        // //获取cookie后向后台鉴权
-        // let token = Cookies.get('token');
-        // if (token !== undefined) {
-        //     postRequest('/getUserInfo', {}).then(response => {
-        //         console.log("鉴权回调：  ", response)
-        //         if (response.code == 200) {
-        //
-        //         }
-        //     })
-        // }
          else {
             //访问的是受保护资源或页面 没有登陆跳转到登陆页面
             //并将当前路由的完整路径作为查询参数传给login组件，以便登陆成功后进行页面跳转

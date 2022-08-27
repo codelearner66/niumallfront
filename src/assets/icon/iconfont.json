@@ -1,0 +1,44 @@
+{
+  "id": "3559360",
+  "name": "niuMall",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "1268730",
+      "name": "人民币",
+      "font_class": "renminbi1688",
+      "unicode": "e6cb",
+      "unicode_decimal": 59083
+    },
+    {
+      "icon_id": "9096739",
+      "name": "alipay",
+      "font_class": "alipay",
+      "unicode": "e666",
+      "unicode_decimal": 58982
+    },
+    {
+      "icon_id": "11474340",
+      "name": "rmb",
+      "font_class": "rmb",
+      "unicode": "e703",
+      "unicode_decimal": 59139
+    },
+    {
+      "icon_id": "13087830",
+      "name": "结汇",
+      "font_class": "jiehui",
+      "unicode": "e7c4",
+      "unicode_decimal": 59332
+    },
+    {
+      "icon_id": "18696589",
+      "name": "收货icon",
+      "font_class": "shouhuoicon",
+      "unicode": "e7df",
+      "unicode_decimal": 59359
+    }
+  ]
+}

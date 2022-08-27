@@ -39,8 +39,12 @@ service.interceptors.response.use(success => {
     if (success.data.code==200){
         return success.data;
     }
-    else{
+
+    else {
         Message.error({message: success.data.msg})
+        if (success.data.code == 1003) {
+            router.push("/login")
+        }
     }
     //一般错误弹出消息 特殊错误时可以进行页面跳转之类的操作
 }, error => {
@@ -55,8 +59,6 @@ service.interceptors.response.use(success => {
 // 请求拦截器，例如请求的时候在头部加上请求的token
 service.interceptors.request.use(config => {
     if (localStorage.getItem('token')) {
-        let url = config.url;
-        //console.log("发起请求的路径",url);
         config.headers.ACCESS_TOKEN = localStorage.getItem('token');
     }
     return config;  //  有且必须有一个config对象被返回

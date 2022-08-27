@@ -7,6 +7,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 import axios from 'axios'
 //简单动画
 import 'animate.css/animate.min.css'
+import './assets/icon/iconfont.css'
 
 Vue.config.errorHandler=function (err) {
   console.log("global", err);
