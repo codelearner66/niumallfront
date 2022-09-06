@@ -14,8 +14,7 @@
           :page-size="this.size"
           :current-page="current"
           :total="this.total"
-          @current-change="pageCurrentChange"
-      >
+          @current-change="pageCurrentChange">
       </el-pagination>
     </el-col>
   </el-row>

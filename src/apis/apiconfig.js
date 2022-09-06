@@ -36,16 +36,14 @@ service.interceptors.response.use(success => {
         return ;
     }
        //响应数据出错时 统一操作
-    if (success.data.code==200){
-        return success.data;
-    }
-
-    else {
-        Message.error({message: success.data.msg})
         if (success.data.code == 1003) {
-            router.push("/login")
+            Message.error({message: success.data.msg})
+            setTimeout(() => {
+                router.push("/login")
+            }, 1000);
+        } else {
+            return success.data;
         }
-    }
     //一般错误弹出消息 特殊错误时可以进行页面跳转之类的操作
 }, error => {
     //data.msg 是后端RespBean中响应的信息

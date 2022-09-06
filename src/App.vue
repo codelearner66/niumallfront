@@ -3,16 +3,18 @@
     <headers/>
     <router-view/>
     <el-divider></el-divider>
-    <div style="width: 100%;height: 100px; color: antiquewhite"></div>
+    <footerNav/>
   </div>
-
 </template>
 <script>
 import headers from "@/components/header";
-export  default {
-  name:'app',
-  components:{
-    headers
+import footerNav from "@/components/footerNav";
+
+export default {
+  name: 'app',
+  components: {
+    headers,
+    footerNav
   }
 }
 </script>

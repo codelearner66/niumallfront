@@ -590,6 +590,10 @@ export default {
               });
               this.fullscreenLoading = false;
             })
+          } else {
+            this.fullscreenLoading = false;
+            this.$message.error(response.msg)
+
           }
         })
 
