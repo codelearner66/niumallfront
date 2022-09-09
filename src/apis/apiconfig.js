@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {Message} from 'element-ui';
 import router from "@/router";
+import Cookies from "js-cookie";
 
 //  让请求在浏览器中允许跨域携带cookie
 axios.defaults.withCredentials = true;
@@ -37,10 +38,12 @@ service.interceptors.response.use(success => {
     }
        //响应数据出错时 统一操作
         if (success.data.code == 1003) {
-            Message.error({message: success.data.msg})
+            Message.error({message: success.data.msg});
             setTimeout(() => {
                 router.push("/login")
             }, 1000);
+            localStorage.removeItem("token");
+            Cookies.remove("token");
         } else {
             return success.data;
         }

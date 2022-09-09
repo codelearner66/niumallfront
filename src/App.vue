@@ -2,7 +2,7 @@
   <div id="app">
     <headers/>
     <router-view/>
-    <el-divider></el-divider>
+    <hr style=" height:1px;border-left:none; border-bottom:none;border-top:1px solid #becdd8;margin-top: 20px;margin-bottom: 20px;"/>
     <footerNav/>
   </div>
 </template>

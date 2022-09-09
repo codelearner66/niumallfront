@@ -1,5 +1,5 @@
 <template>
-  <el-row style="background-color: #f3f3f3;height: 900px">
+  <el-row style="background-color: #f3f3f3;height: 670px">
     <el-divider/>
     <el-col :offset="4" :span="16">
       <el-col :span="24"
@@ -57,7 +57,7 @@
                 <span>
                    <i style="font-size: 20px; line-height: 20px; color: #ffffff; border-radius:50%;background-color: #f6466c"
                       class="icon-renminbi1688"> </i>
-                  <span style="color: #FF0036;font-size: small;margin-left: 10px;">  我的余额 {{ 10000 }}</span>
+                  <span style="color: #FF0036;font-size: small;margin-left: 10px;">  我的余额 {{ userInfo.balance }}</span>
                   <span>
                     <el-button class="buttonStyle animate__animated animate__wobble" @click="balance=true" size="small"
                                plain>去充值</el-button>
@@ -69,12 +69,30 @@
               title="余额充值"
               width="60%"
               :visible.sync="balance">
-            <div slot="default" style="margin-bottom: 40px;">
+            <div slot="default" style="margin-bottom: 40px;height: 180px;overflow: auto">
               <el-col :offset="4" :span="16">
                 <el-col :span="4"
-                        style="height: 50px;line-height:50px;margin-left: 20px;margin-top: 10px; border: 1px solid tomato"
+                        class="balanceClass"
                         v-for="(item,index) in balanceSum" :key="index">
-                  {{ item }}
+                  <el-button type="text" @click="addBalance(index)" style="padding: 0">
+                    <span
+                        style="color: #3b4446;font-family:'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;font-weight: normal;">余额<span
+                        style="color: #FF0036">{{ item }}</span>元</span><br><br>
+                    <span>
+                       {{ item }}<i class="icon-rmb"/>
+                    </span>
+                  </el-button>
+                </el-col>
+
+                <el-col :span="4" class="balanceClass">
+                  <el-col :span="24"
+                          style="height: 20px; color: #3b4446;font-size:12px;font-family: 'Microsoft YaHei',system-ui;font-weight:lighter;">
+                    自定义金额/元
+                  </el-col>
+                  <el-col :offset="1" :span="22" style="height: 30px;margin-top: 4px">
+                    <el-input v-model="balanceUserSum" @change.native="handleUserSum" class="demo-ruleForm" type="text"
+                              placeholder="100"></el-input>
+                  </el-col>
                 </el-col>
               </el-col>
             </div>
@@ -84,7 +102,7 @@
           </el-dialog>
         </el-col>
       </el-col>
-      <el-col :span="24" style=" background-color: #ffffff;height:500px; margin-top: 15px;">
+      <el-col :span="24" style=" background-color: #ffffff;height:440px; margin-top: 15px;">
         <el-col :span="24" style="text-align: left;font-weight: bold; font-size: medium;margin-top: 30px;">
          <span style="margin-left: 20px;">
            基本信息
@@ -380,13 +398,12 @@
                     地址管理 <i class="el-icon-location"></i>
                   </span>
                 </template>
-                <el-col :span="24">
+                <el-col :span="24" style="height:250px;overflow: auto;">
                   <el-col :span="24" style="height:10px">
                     <el-col :offset="23" :span="1">
                       <el-tooltip content="新建地址" effect="light" placement="top">
                         <el-button icon="el-icon-plus" type="text" @click="newAddrHandle"></el-button>
                       </el-tooltip>
-
                     </el-col>
                   </el-col>
                   <el-col :span="9" :offset="2" v-for="(item,index) in userAddrInfo" :key="index">
@@ -501,6 +518,7 @@ export default {
       upDataHeader: false,
       balance: false,
       balanceSum: [500, 1000, 2000, 4000, 8000, 10000, 20000],
+      balanceUserSum: '',
       nickName: '',
       sex: -1,
       sexRadio: false,
@@ -797,6 +815,41 @@ export default {
           message: '已取消'
         });
       });
+    },
+    addBalance(index) {
+      let sum = this.balanceSum[index];
+      postRequest("/pay/api/trade/aliPay", {
+        goodsId: 0,
+        sum: sum,
+        num: 1,
+        paymentType: 1,
+        userAddr: {
+          id: 0
+        }
+      }).then(response => {
+        document.write(response.data)
+        this.fullscreenLoading = false;
+      }).catch(error => {
+        this.fullscreenLoading = false;
+        this.$message(error.msg);
+      })
+    },
+    handleUserSum() {
+      postRequest("/pay/api/trade/aliPay", {
+        goodsId: 0,
+        sum: this.balanceUserSum,
+        num: 1,
+        paymentType: 1,
+        userAddr: {
+          id: 0
+        }
+      }).then(response => {
+        document.write(response.data)
+        this.fullscreenLoading = false;
+      }).catch(error => {
+        this.fullscreenLoading = false;
+        this.$message(error.msg);
+      })
     }
   },
 
@@ -830,6 +883,36 @@ export default {
   width: 178px;
   height: 178px;
   display: block;
+}
+
+.demo-ruleForm >>> .el-input__inner {
+  border: 0;
+  height: 30px;
+  line-height: 30px;
+  padding: 0 0 0 0;
+}
+
+.balanceClass {
+  height: 70px;
+  line-height: 40px;
+  margin-left: 30px;
+  margin-top: 10px;
+  border: 1px solid #d37c69;
+  border-radius: 5px;
+  box-shadow: 10px 10px 5px #a4a7a7;
+}
+
+.balanceClass button {
+  color: #b87100;
+  font-size: medium;
+  font-family: "Hiragino Sans GB", serif;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.balanceClass:hover {
+  border-color: #FF0036;
+  background-color: #fff9f1;
 }
 
 .buttonStyle {

@@ -35,7 +35,7 @@
         </router-link>
       </el-col>
       <el-col :span="2">
-        <router-link to="/myInfor" class="router-header">
+        <router-link to="/myOrders" class="router-header">
           <span class="headerspan"> <i class="el-icon-s-order" style="color: hotpink"></i> 我的订单</span>
         </router-link>
       </el-col>

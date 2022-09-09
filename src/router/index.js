@@ -61,6 +61,15 @@ const routes = [
         component: () => import('../views/myInfo/myInfo')
     },
     {
+        path: '/myOrders',
+        name: 'myOrders',
+        meta: {
+            title: '我的订单',
+            requiresAuth: true
+        },
+        component: () => import('../views/order/myOrders')
+    },
+    {
         path: "/login",
         name: 'login',
         meta: {

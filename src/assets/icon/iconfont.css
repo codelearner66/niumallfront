@@ -1,24 +1,60 @@
 @font-face {
-  font-family: "iconfont"; /* Project id 3559360 */
-  src: url('iconfont.woff2?t=1659342206786') format('woff2'),
-  url('iconfont.woff?t=1659342206786') format('woff'),
-  url('iconfont.ttf?t=1659342206786') format('truetype');
+    font-family: "iconfont"; /* Project id 3559360 */
+    src: url('iconfont.woff2?t=1662640320937') format('woff2'),
+    url('iconfont.woff?t=1662640320937') format('woff'),
+    url('iconfont.ttf?t=1662640320937') format('truetype');
 }
 
 .iconfont, [class^="icon-"], [class*=" icon-"] {
-  font-family: "iconfont" !important;
-  font-size: 16px;
-  font-style: normal;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    font-family: "iconfont" !important;
+    font-size: 16px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-icon-test:before {
+    content: "\e65d";
+}
+
+.icon-icon-test1:before {
+    content: "\e65e";
+}
+
+.icon-icon-test2:before {
+    content: "\e65f";
+}
+
+.icon-icon-test3:before {
+    content: "\e660";
+}
+
+.icon-icon-test4:before {
+    content: "\e661";
+}
+
+.icon-icon-test5:before {
+    content: "\e662";
+}
+
+.icon-dingtalk:before {
+    content: "\e667";
+}
+
+.icon-taobao:before {
+    content: "\e669";
+}
+
+.icon-icon-test6:before {
+    content: "\e66a";
 }
 
 .icon-renminbi1688:before {
-  content: "\e6cb";
+    content: "\e6cb";
 }
 
 .icon-alipay:before {
-  content: "\e666";
+    content: "\e666";
 }
 
 .icon-rmb:before {
