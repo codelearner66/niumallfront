@@ -531,7 +531,7 @@ export default {
           this.fullscreenLoading = false;
         }).catch(error => {
           this.fullscreenLoading = false;
-          this.$message(error.msg);
+          this.$message.error(error.msg);
         })
       }
       //余额支付

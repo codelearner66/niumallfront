@@ -1,16 +1,17 @@
 <template>
-  <el-row>
+  <el-row style="height: 600px">
     <el-col :span="24" v-if="flag"
             v-loading.fullscreen.lock="flag">
 
     </el-col>
-    <el-col :span="24" v-if="!flag">
+    <el-col :span="24" v-if="!flag" style="height: 600px">
       <el-table
           :data="orders"
           border
           tooltip-effect="light"
           style="width: 100%;"
-          max-height="400px">
+          max-height="550"
+          height="550">
         <el-table-column
             label="序号"
             align="center"
@@ -123,7 +124,18 @@
             width="180">
           <template slot-scope="scope">
             <el-col :span="24">
-              <span style="color: #FF0036">{{ scope.row.orderStatus }}</span>
+              <span style="color: #FF0036">{{ orderStatus[scope.row.orderStatus - 1] }}</span>
+            </el-col>
+          </template>
+        </el-table-column>
+
+        <el-table-column
+            label="支付方式"
+            align="center"
+            width="180">
+          <template slot-scope="scope">
+            <el-col :span="24">
+              <span style="color: rgba(202,69,97,0.84)">{{ payMentType[scope.row.paymentType] }}</span>
             </el-col>
           </template>
         </el-table-column>
@@ -137,10 +149,16 @@
         <el-table-column
             fixed="right"
             label="操作"
-            width="100">
+            align="center"
+            width="150">
           <template slot-scope="scope">
-            <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
-            <el-button type="text" size="small">编辑</el-button>
+            <el-col :span="24" v-if="scope.row.orderStatus===1">
+              <el-button @click="handleClick(scope.row)" type="text" size="small">立即支付</el-button>
+              <el-button @click="cancelOrder(scope.row)" type="text" size="small">取消订单</el-button>
+            </el-col>
+            <el-col :span="24" v-if="scope.row.orderStatus===2">
+              <el-button @click="handleClick(scope.row)" type="text" size="small">申请退款</el-button>
+            </el-col>
           </template>
         </el-table-column>
       </el-table>
@@ -149,7 +167,7 @@
   </el-row>
 </template>
 <script>
-import {getRequest} from "@/apis/api";
+import {getRequest, postRequest} from "@/apis/api";
 
 export default {
   name: "order",
@@ -157,32 +175,75 @@ export default {
   data() {
     return {
       flag: true,
-      orderStatus: ['未支付', '已支付'],
+      orderStatus: ['未支付', '已支付', '未发货',
+        '已发货', '交易成功', '交易关闭', '用户取消订单',
+        '退款中', '已退款', '退款异常'],
+      payMentType: ['余额支付', '支付宝支付'],
       goods: [],
       addr: [],
     }
   },
   created() {
     setTimeout(() => {
+      this.goods = new Array(this.orders.length);
+      this.addr = new Array(this.orders.length)
       console.log('orders:   =====>', this.orders)
       for (let i = 0; i < this.orders.length; i++) {
-        this.goods.push(JSON.parse(this.orders[i].orderContent));
+        this.goods[i] = JSON.parse(this.orders[i].orderContent);
 
-        this.orders[i].orderStatus = this.orderStatus[this.orders[i].orderStatus - 1];
-        //todo 地址和商品信息不对照
         getRequest("/getUserAddrById/" + this.orders[i].addrId).then(response => {
-          this.addr.push(response.data);
+          console.log("================>", response)
+          if (response.code == 200) {
+            this.addr[i] = response.data;
+          } else {
+            this.addr[i] = {
+              addrId: "140213205",
+              address: "删除",
+              city: "信",
+              delFlag: 0,
+              district: "息已",
+              id: "-1",
+              mobile: "XXXXXXXXXXX",
+              name: "*****",
+              phone: "XXXXXXXXXXX",
+              receiverZip: "******",
+              state: "地址",
+              userId: "*********"
+            }
+
+          }
+
         }).catch(error => {
           this.$message.error(error.msg);
         })
       }
-    }, 800)
+    }, 100)
     setTimeout(() => {
       this.flag = false;
-    }, 1000)
+    }, 800)
     console.log("addr:", this.addr)
   },
-  methods: {}
+  methods: {
+    handleClick(item) {
+      console.log("item===========>", item);
+      getRequest("/pay/api/trade/" + item.orderId, {}).then(response => {
+        document.write(response.data)
+      }).catch(error => {
+        this.$message.error(error.msg);
+      })
+    },
+    //取消订单
+    cancelOrder(item) {
+
+      postRequest("/pay/api/trade/close/" + item.orderId, {}).then(response => {
+        if (response.code == 200) {
+          this.$message.success("操作成功")
+        }
+      }).catch(error => {
+        this.$message.error(error.msg);
+      })
+    }
+  }
 }
 </script>
 
