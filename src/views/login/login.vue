@@ -6,7 +6,7 @@
           <h5> 其他登陆方式 </h5>
           <el-tooltip class="item" effect="dark" content="账号密码登录" placement="left-end">
             <el-button type="text" @click="isShow(1)" style="font-size:x-large">
-              <i  class="el-icon-user"></i>
+              <i class="el-icon-user"></i>
             </el-button>&nbsp;
           </el-tooltip>
           <el-tooltip class="el-tooltip" effect="dark" content="手机号登陆" x-placement="bottom-end">
@@ -65,7 +65,9 @@
               <router-link to="/register">注册账号</router-link>
             </el-form-item>
             <el-form-item>
-              <el-button type="success" size="small" icon="el-icon-circle-check" @click="e_codeLogin('loginForm',0)">登 录</el-button>
+              <el-button type="success" size="small" icon="el-icon-circle-check" @click="e_codeLogin('loginForm',0)">登
+                录
+              </el-button>
 
               <el-button type="warning" size="small" icon="el-icon-delete" @click="resetForm">重置</el-button>
             </el-form-item>
@@ -249,8 +251,8 @@ export default {
     },
     resetForm() {
       this.user = "";
-      this.email='';
-      this.message='';
+      this.email = '';
+      this.message = '';
     },
     isShow(n) {
       this.$nextTick(() => {

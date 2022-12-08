@@ -40,7 +40,7 @@ const routes = [
             title: "商品详情",
             requiresAuth: true
         },
-        component: () => import(/* webpackChunkName: "about" */ '../views/goods/goodsDetails')
+        component: () => import('../views/goods/goodsDetails')
     },
     {
         path: '/shopCartList',
@@ -76,7 +76,16 @@ const routes = [
             title: "登录",
             requiresAuth: false
         },
-        component: () => import(/*webpackChunkName: "login"*/'../views/login/login')
+        component: () => import('../views/login/login')
+    },
+    {
+        path: "/message",
+        name: 'message',
+        meta: {
+            title: "信息",
+            requiresAuth: true
+        },
+        component: () => import('../views/message/userChat')
     },
     {
         path: "/success",
@@ -85,7 +94,7 @@ const routes = [
             title: "支付成功",
             requiresAuth: false
         },
-        component: () => import(/*webpackChunkName: "login"*/'../views/goods/success')
+        component: () => import('../views/goods/success')
     },
     {
         path: "/register",
@@ -94,7 +103,7 @@ const routes = [
             title: "注册",
             requiresAuth: false
         },
-        component: () => import(/*webpackChunkName: "register"*/'../views/login/register')
+        component: () => import('../views/login/register')
     },
     {
         path: '/findPassword',
@@ -103,7 +112,7 @@ const routes = [
           title: "找回密码",
             requiresAuth: false
         },
-        component: ()=>import(/*webpackChunkName: "register"*/'../views/login/findpassword')
+        component: () => import('../views/login/findpassword')
     },
     {
         path: "/404",
@@ -137,7 +146,7 @@ router.beforeEach((to, from, next) => {
         next();
     } else {
        let islogin= store.getters.getIsLogin;
-        console.log(islogin,"是否登录！")
+        //console.log(islogin,"是否登录！")
         if(islogin){
             next();
         }

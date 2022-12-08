@@ -125,13 +125,13 @@
               </el-col>
               <el-col v-else :span="14">
                 <el-col :span="15">
-                  <el-input type="text" clearable v-model="nickName" :placeholder="userInfo.nickName"></el-input>
+                  <el-input type="text" clearable v-model="nickName1" :placeholder="userInfo.nickName"></el-input>
                 </el-col>
                 <el-col :span="4">
                   <el-button plain size="small" class="buttonStyle" @click="updataUser">保存</el-button>
                 </el-col>
                 <el-col :span="4">
-                  <el-button plain size="small" class="buttonStyle" @click="nickName=''">取消</el-button>
+                  <el-button plain size="small" class="buttonStyle" @click="nickName='';nickName1=''">取消</el-button>
                 </el-col>
               </el-col>
               <el-col @mouseenter.native="buttonColor='tomato'"
@@ -214,13 +214,15 @@
               </el-col>
               <el-col v-if="phoneNumber" :span="14">
                 <el-col :span="15">
-                  <el-input type="text" clearable v-model="phoneNumber" :placeholder="userInfo.phoneNumber"></el-input>
+                  <el-input type="text" clearable v-model.lazy="phoneNumber1"
+                            :placeholder="userInfo.phonenumber"></el-input>
                 </el-col>
                 <el-col :span="4">
                   <el-button plain size="small" @click="updataUser" class="buttonStyle">保存</el-button>
                 </el-col>
                 <el-col :span="4">
-                  <el-button plain size="small" class="buttonStyle" @click="phoneNumber='';phoneFlag=false">取消
+                  <el-button plain size="small" class="buttonStyle"
+                             @click="phoneNumber='';phoneNumber1='';phoneFlag=false">取消
                   </el-button>
                 </el-col>
               </el-col>
@@ -245,7 +247,7 @@
             </span>
             </el-col>
             <el-col :span="20">
-              <el-col v-if="(!email)||(!emailFlag)"
+              <el-col v-if="(email==='')||(!emailFlag)"
                       :span="4"
                       style="font-size: small; text-align: left;"
                       @mouseenter.native="emailFlag=true"
@@ -254,13 +256,14 @@
               </el-col>
               <el-col v-if="email" :span="14">
                 <el-col :span="15">
-                  <el-input type="text" clearable v-model="email" :placeholder="userInfo.email"></el-input>
+                  <el-input type="text" clearable v-model.lazy="email1" :placeholder="userInfo.email"></el-input>
                 </el-col>
                 <el-col :span="4">
                   <el-button plain size="small" @click="updataUser" class="buttonStyle">保存</el-button>
                 </el-col>
                 <el-col :span="4">
-                  <el-button plain size="small" class="buttonStyle" @click="email='';emailFlag=false">取消</el-button>
+                  <el-button plain size="small" class="buttonStyle" @click="email='';email1='';emailFlag=false">取消
+                  </el-button>
                 </el-col>
               </el-col>
               <el-col :span="10"
@@ -268,7 +271,7 @@
                       @mouseleave.native="emailFlag=false"
                       style="text-align: left;font-size: small;height: 40px;">
                 <el-button
-                    v-if="(!email)&&emailFlag"
+                    v-if="(email==='')&&emailFlag"
                     @click="email=userInfo.email"
                     type="text"
                     style="color: #de4949">
@@ -406,7 +409,8 @@
                       </el-tooltip>
                     </el-col>
                   </el-col>
-                  <el-col :span="9" :offset="2" v-for="(item,index) in userAddrInfo" :key="index">
+                  <el-col :span="9" :offset="2" v-if="userAddrInfo!=null" v-for="(item,index) in userAddrInfo"
+                          :key="index">
                     <el-descriptions :column="2" size="mini" border>
                       <template slot="title">
                         <span>
@@ -507,7 +511,6 @@
 </template>
 <script>
 import {getRequest, postRequest} from "@/apis/api";
-
 let addrData = [];
 export default {
   name: "myInfo",
@@ -520,11 +523,14 @@ export default {
       balanceSum: [500, 1000, 2000, 4000, 8000, 10000, 20000],
       balanceUserSum: '',
       nickName: '',
+      nickName1: '',
       sex: -1,
       sexRadio: false,
       phoneNumber: '',
+      phoneNumber1: '',
       phoneFlag: false,
       email: '',
+      email1: '',
       emailFlag: false,
       userInfo: {},
       userAddrInfo: [],
@@ -675,25 +681,29 @@ export default {
       });
     },
     deleteAddr(index) {
-      this.$confirm('此操作将永久删除该地址, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        getRequest("/deleteUserAddr?id=" + this.userAddrInfo[index].id, {})
-            .then(respon => {
-              if (respon.code == 200) {
-                this.$message.success("删除成功");
-                this.userAddrInfo.splice(index, 1);
-              }
-            })
-            .catch(error => {
-              this.$message.error("地址删除失败")
-            })
-      }).catch(() => {
-        this.$message.info("已取消删除！")
-      })
-
+      // alert(this.userAddrInfo[index].id)
+      if (this.userAddrInfo[index].id == -1) {
+        this.$message.error("这是示例地址无法删除！");
+      } else {
+        this.$confirm('此操作将永久删除该地址, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          getRequest("/deleteUserAddr?id=" + this.userAddrInfo[index].id, {})
+              .then(respon => {
+                if (respon.code == 200) {
+                  this.$message.success("删除成功");
+                  this.userAddrInfo.splice(index, 1);
+                }
+              })
+              .catch(error => {
+                this.$message.error("地址删除失败")
+              })
+        }).catch(() => {
+          this.$message.info("已取消删除！")
+        })
+      }
     },
     updataAddr() {
       if (this.addr.length < 3) {
@@ -737,8 +747,8 @@ export default {
         id: this.userInfo.id,
         nickName: this.nickName == '' ? undefined : this.nickName,
         sex: this.sex === -1 ? undefined : this.sex,
-        phoneNumber: this.phoneNumber == '' ? undefined : this.phoneNumber,
-        email: this.email == '' ? undefined : this.email
+        phoneNumber: this.phoneNumber1 == '' ? undefined : this.phoneNumber1,
+        email: this.email1 == '' ? undefined : this.email1
       }).then(respon => {
         this.$message.success("更新成功！");
       }).catch(error => {
@@ -747,15 +757,35 @@ export default {
     },
     getUserAddr() {
       getRequest("/getUserAddr", {}).then(response => {
-        this.userAddrInfo = response.data
+        if (response.data.length !== 0) {
+          this.userAddrInfo = response.data
+        } else {
+          let temp = {
+            'addrId': "-1",
+            'address': "月坛街道",
+            'city': "北京市",
+            'delFlag': 0,
+            'district': "西城区",
+            'id': "-1",
+            'mobile': "无",
+            'name': this.userInfo.nickName,
+            'state': "北京市",
+            'userId': this.userInfo.id
+          }
+          this.userAddrInfo.push(temp);
+        }
       })
     },
     handleAddr(index) {
-      this.addrId = index;
-      this.addrForm.nickName = this.userAddrInfo[index].name;
-      this.addrForm.mobile = this.userAddrInfo[index].mobile;
-      // this.userAddrInfo[index].id;
-      this.madFlag = true;
+      if (this.userAddrInfo[index].id == -1) {
+        this.$message.error("这是示例地址无法修改！");
+      } else {
+        this.addrId = index;
+        this.addrForm.nickName = this.userAddrInfo[index].name;
+        this.addrForm.mobile = this.userAddrInfo[index].mobile;
+        // this.userAddrInfo[index].id;
+        this.madFlag = true;
+      }
     },
     newAddrHandle() {
       this.newAddr = true;

@@ -38,6 +38,10 @@ service.interceptors.response.use(success => {
     }
        //响应数据出错时 统一操作
         if (success.data.code == 1003) {
+            //如果是首页时 不进行提示
+            if (success.config.url === "/getUserInfor") {
+                return;
+            }
             Message.error({message: success.data.msg});
             setTimeout(() => {
                 router.push("/login")

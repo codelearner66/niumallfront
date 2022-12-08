@@ -23,7 +23,7 @@
       <!--    头像/公告-->
       <el-col :span="4" style=" height: 400px">
         <el-col :span="24" style="margin-top: 45px">
-          <el-avatar shape="square" :size="50" :src="headerPath" fit="fill"></el-avatar>
+          <el-avatar shape="square" :size="50" :src="headerPath" alt="用户头像" fit="fill"></el-avatar>
         </el-col>
         <el-col :span="24" style="margin-top: 20px">
           <router-link class="main_nav" to="/myInfor" style="font-size: x-small">Hi: {{ this.userInfor.nickName }}
@@ -99,6 +99,9 @@ export default {
         this.userInfor = response.data;
         this.headerPath = this.userInfor.avatar;
         console.log(this.headerPath)
+      }).catch(error => {
+        this.userInfor = "请先登录....";
+        this.headerPath = "error";
       })
     },
     //获取轮播图

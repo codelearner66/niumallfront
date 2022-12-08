@@ -3,7 +3,7 @@
     <el-col :span="2">
       <img src="../assets/logo.png" style="height: 40px;width: 106px" alt="logo图标"/>
     </el-col>
-    <el-col :offset="3"   :span="18" id="header">
+    <el-col :offset="3" :span="18" id="header">
       <el-col :span="2">
         <router-link to="/" class="router-header">
           &nbsp;<span class="headerspan"><i class="el-icon-s-home" style="color: hotpink"/>首页</span>
@@ -40,8 +40,11 @@
         </router-link>
       </el-col>
       <el-col :span="2">
-        <router-link to="/myInfor" class="router-header">
-          <el-badge :value="12" class="headerspan"> <i class="el-icon-s-comment" style="color: hotpink"></i> 消息</el-badge>
+        <router-link to="/message" class="router-header">
+          <el-badge :hidden="this.$store.getters.getMessageCount==0" :value="this.$store.getters.getMessageCount"
+                    class="headerspan"><i class="el-icon-s-comment"
+                                          style="color: hotpink"></i> 消息
+          </el-badge>
         </router-link>
       </el-col>
       <el-col :span="2">
@@ -56,7 +59,7 @@
 <script>
 import router from "@/router";
 import Cookies from 'js-cookie'
-import {postRequest} from "@/apis/api";
+import {getRequest, postRequest} from "@/apis/api";
 import {Message} from "element-ui";
 
 export default {
@@ -65,6 +68,9 @@ export default {
     return {
       logoUrl: '../assets/logo.png'
     }
+  },
+  created() {
+    this.getMessageNum();
   },
   methods: {
     loginbuton() {
@@ -83,18 +89,23 @@ export default {
           if (response.code == 200) {
             this.$message({
               showClose: true,
-              type:"success",
+              type: "success",
               message: '已成功退出！',
               duration: 1500
             });
           } else {
-            Message.error("登出发生错误");
+            this.$message({
+              showClose: true,
+              type: "error",
+              message: '登出发生错误！',
+              duration: 1500
+            });
           }
           this.$store.commit('noLogin')
           Cookies.remove("token");
           localStorage.removeItem("token");
           window.location.reload();
-         // router.push("/login");
+          // router.push("/login");
         })
       }).catch(() => {
         this.$message({
@@ -102,7 +113,16 @@ export default {
           message: '已取消'
         });
       })
+    },
+    getMessageNum() {
+      getRequest("/websocket/getAllUnreadCount", "").then(success => {
+        if (success.code === 200) {
+          console.log("getAllUnreadCount :", success.data);
+          this.$store.commit("setMessageCount", success.data);
+        }
+      })
     }
+
   }
 }
 </script>

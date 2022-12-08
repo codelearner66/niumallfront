@@ -33,6 +33,13 @@
               align="center"
               width="55">
           </el-table-column>
+          <el-table-column label="序号"
+                           align="center"
+                           width="100">
+            <template slot-scope="scope">
+              {{ (pages - 1) * size + scope.$index + 1 }}
+            </template>
+          </el-table-column>
           <el-table-column
               prop="title"
               label="商品信息"
@@ -414,6 +421,11 @@ export default {
                 type: 'info',
                 message: '取消输入'
               });
+            })
+          } else if (response.code === 6005) {
+            this.$message({
+              type: 'error',
+              message: response.msg
             })
           }
         })

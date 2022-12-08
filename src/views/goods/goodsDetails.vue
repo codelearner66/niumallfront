@@ -285,7 +285,6 @@
             <el-col :span="8">
               <hr style="height:1px;border-left:none; border-bottom:none;border-top:1px dashed #cad9e6;"/>
             </el-col>
-
           </el-col>
           <el-col :span="24"
                   class="infinite-list"

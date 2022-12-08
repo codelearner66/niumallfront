@@ -1,15 +1,31 @@
 <template>
   <el-row>
     <el-divider></el-divider>
-    <el-col :offset=3 :span="18">
+    <el-col :span="24" v-if="flag"></el-col>
+    <el-col v-if="!flag" :offset=3 :span="18">
       <el-col :span="24">
         <el-tabs type="border-card">
           <el-tab-pane>
-            <span slot="label"><i class="el-icon-suitcase"></i> 未支付</span>
-            <el-col :span="24" style="height: 580px;">
-              <order :orders="noPay.records"></order>
+            <span slot="label"><i class="el-icon-suitcase"></i>所有订单</span>
+            <el-col :span="24" style="height: 600px;">
+              <order :pages="allOrder.current" :orders="allOrder.records"></order>
             </el-col>
-            <el-col :span="24" style="height: 40px;line-height: 40px">
+            <el-col :span="24" style="margin-top: 10px">
+              <el-pagination
+                  layout="prev, pager, next"
+                  background
+                  :current-page="Number.parseInt(allOrder.current)"
+                  @current-change="handlerAllOrder"
+                  :total="Number.parseInt(allOrder.total)">
+              </el-pagination>
+            </el-col>
+          </el-tab-pane>
+          <el-tab-pane>
+            <span slot="label"><i class="el-icon-suitcase"></i> 未支付</span>
+            <el-col :span="24" style="height: 600px;">
+              <order :pages="noPay.current" :orders="noPay.records"></order>
+            </el-col>
+            <el-col :span="24" style="margin-top: 10px">
               <el-pagination
                   layout="prev, pager, next"
                   background
@@ -19,17 +35,16 @@
               </el-pagination>
             </el-col>
           </el-tab-pane>
-
-
           <el-tab-pane>
           <span slot="label">
             <i class="el-icon-collection"></i> 已付款
           </span>
-            <el-col :span="24" style="height: 580px;">
-              <order :orders="payed.records"></order>
+            <el-col :span="24" style="height: 600px;">
+              <order :pages="payed.current" :orders="payed.records"></order>
             </el-col>
-            <el-col :span="24" style="height: 40px;line-height: 40px">
+            <el-col :span="24" style="margin-top: 10px">
               <el-pagination
+                  style="font-size: large"
                   background
                   layout="prev, pager, next"
                   :current-page="Number.parseInt(payed.current)"
@@ -42,13 +57,37 @@
           <span slot="label">
             <i class="el-icon-truck"></i> 待收货
           </span>
-            角色管理
+            <el-col :span="24" style="height: 600px;">
+              <order :pages="OrderShopped.current" :orders="OrderShopped.records"></order>
+            </el-col>
+            <el-col :span="24" style="margin-top: 10px">
+              <el-pagination
+                  style="font-size: large"
+                  background
+                  layout="prev, pager, next"
+                  :current-page="Number.parseInt(OrderShopped.current)"
+                  @current-change="handleOrderUnshopped"
+                  :total="Number.parseInt(OrderShopped.total)">
+              </el-pagination>
+            </el-col>
           </el-tab-pane>
           <el-tab-pane>
           <span slot="label">
             <i class="el-icon-chat-line-square"></i> 退款/售后
           </span>
-            定时任务补偿
+            <el-col :span="24" style="height: 600px;">
+              <order :pages="OrderProcessing.current" :orders="OrderProcessing.records"></order>
+            </el-col>
+            <el-col :span="24" style="margin-top: 10px">
+              <el-pagination
+                  style="font-size: large"
+                  background
+                  layout="prev, pager, next"
+                  :current-page="Number.parseInt(OrderProcessing.current)"
+                  @current-change="handlerOrderProcessing"
+                  :total="Number.parseInt(OrderProcessing.total)">
+              </el-pagination>
+            </el-col>
           </el-tab-pane>
         </el-tabs>
       </el-col>
@@ -67,17 +106,40 @@ export default {
   },
   data() {
     return {
+      flag: true,
+      allOrder: {},
       //未支付信息
       noPay: {},
       //已支付信息
       payed: {},
+      //待收货
+      OrderShopped: {},
+      //退款中
+      OrderProcessing: {},
     }
   },
   created() {
+    this.getAllOrder(1);
     this.getNoPayData(1);
     this.getPayedData(1);
+    this.getOrderUnshopped(1);
+    this.getOrderProcessing(1);
+    setTimeout(() => {
+      this.flag = false;
+    }, 250)
   },
   methods: {
+    //获取用户所有订单
+    getAllOrder(index) {
+      getRequest('/userALlOrder/' + index, {}).then(response => {
+        this.allOrder = response.data;
+      }).catch(error => {
+        this.$message.error(error.msg);
+      })
+    },
+    handlerAllOrder(index) {
+      this.getAllOrder(index);
+    },
     //未支付获取数据
     getNoPayData(index) {
       getRequest("/userOrder/" + index, {}).then(response => {
@@ -103,6 +165,35 @@ export default {
     },
     handleCurrentChangePayed(index) {
       this.getPayedData(index);
+    },
+    /**
+     * 查询待收货订单（已发货）
+     */
+    getOrderUnshopped(index) {
+      getRequest("/userOrderShopped/" + index, {}).then(response => {
+        this.OrderShopped = response.data;
+        console.log("待收货订单", this.OrderShopped)
+      }).catch(error => {
+        this.$message.error(error.msg);
+      })
+    },
+    handleOrderUnshopped(index) {
+      this.getOrderUnshopped(index);
+    },
+    /**
+     * 查询退款中订单
+     * @param index
+     */
+    getOrderProcessing(index) {
+      getRequest("/userOrderProcessing/" + index, {}).then(response => {
+        this.OrderProcessing = response.data;
+        console.log("退款中订单", this.OrderProcessing)
+      }).catch(error => {
+        this.$message.error(error.msg);
+      })
+    },
+    handlerOrderProcessing(index) {
+      this.getOrderProcessing(index);
     }
   }
 }
