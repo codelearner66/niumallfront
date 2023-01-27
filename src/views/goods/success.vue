@@ -18,7 +18,7 @@ export default {
       this.$router.push('/')
     },
     handlePage() {
-      this.$router.push('/myInfor')
+      this.$router.push('/myOrders')
     }
   }
 }

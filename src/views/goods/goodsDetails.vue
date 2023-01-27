@@ -6,7 +6,8 @@
       <el-col :span="8" style="height: 420px; border: 1px solid #d34886;border-radius: 10px;padding: 1px">
         <el-col :span="24" v-show="flag">
           <el-col :span="24" style="position: relative">
-            <img width="100%" height="414px" style="border-radius: 10px" :src="goodsData.images" alt="商品图片">
+            <img width="100%" height="414px" style="border-radius: 10px" :src="goodsData.homeRecommendedImages"
+                 alt="商品图片">
             <el-col :span="2" style="position: absolute; left:8px;top:375px">
               <el-button type="text" @click="changePhotoToVideo"
                          style="text-decoration: none;padding: 0;margin: 0; color: tomato; font-size: 30px">
@@ -22,15 +23,14 @@
               <i class="el-icon-close"/>
             </el-button>
           </el-col>
-          <video width="100%" height="400px" :src="goodsData.video" :poster="goodsData.images" controls
+          <video width="100%" height="400px" :src="goodsData.video" :poster="goodsData.homeRecommendedImages" controls
                  style="border-radius: 10px">
             <source :src="goodsData.video" type="video/mp4"/>
           </video>
         </el-col>
       </el-col>
       <!--  商品信息展示-->
-      <el-col :span="15"
-              style="height: 400px;margin-left: 20px;font-family:'Microsoft YaHei',serif;">
+      <el-col :span="15" style="height: 400px;margin-left: 20px;font-family:'Microsoft YaHei',serif;">
         <el-col :span="18" style="background-color: white">
           <el-col :span="24">
             <h4>{{ goodsData.title }}</h4>

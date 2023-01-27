@@ -6,27 +6,27 @@
               style="background-color: #ffffff;height: 130px;padding-top: 13px;padding-bottom: 13px;box-shadow: 10px 10px 15px rgba(106,106,104,0.82)">
         <el-col :span="5">
           <el-tooltip
-              effect="light"
-              content="点击更换头像" placement="top">
+              content="点击更换头像"
+              effect="light" placement="top">
             <a href="javaScript:void(0)" @click="upDataHeader=true">
               <el-avatar :size="100" :src="userInfo.avatar"></el-avatar>
             </a>
           </el-tooltip>
           <el-dialog
-              title="上传头像"
-              :visible.sync="upDataHeader">
+              :visible.sync="upDataHeader"
+              title="上传头像">
             <el-col slot="default" :span="24">
               <el-upload
-                  class="avatar-uploader"
-                  action="http://localhost:8081/uploadHeader"
-                  :auto-upload="true"
-                  :with-credentials="true"
-                  :limit='1'
                   ref="upload"
-                  :show-file-list="false"
+                  :auto-upload="true"
+                  :before-upload="beforeUpload"
                   :drag="true"
+                  :limit='1'
                   :on-success="handleUpdataSuccess"
-                  :before-upload="beforeUpload">
+                  :show-file-list="false"
+                  :with-credentials="true"
+                  action="http://localhost:8081/uploadHeader"
+                  class="avatar-uploader">
                 <el-col :span="24">
                   <el-col :span="6">
                     <img :src="imageUrl" class="avatar">
@@ -55,26 +55,26 @@
           <el-col :span="24" style="margin-top: 15px">
             <el-col :span="9" style="text-align: left">
                 <span>
-                   <i style="font-size: 20px; line-height: 20px; color: #ffffff; border-radius:50%;background-color: #f6466c"
-                      class="icon-renminbi1688"> </i>
+                   <i class="icon-renminbi1688"
+                      style="font-size: 20px; line-height: 20px; color: #ffffff; border-radius:50%;background-color: #f6466c"> </i>
                   <span style="color: #FF0036;font-size: small;margin-left: 10px;">  我的余额 {{ userInfo.balance }}</span>
                   <span>
-                    <el-button class="buttonStyle animate__animated animate__wobble" @click="balance=true" size="small"
-                               plain>去充值</el-button>
+                    <el-button class="buttonStyle animate__animated animate__wobble" plain size="small"
+                               @click="balance=true">去充值</el-button>
                   </span>
                 </span>
             </el-col>
           </el-col>
           <el-dialog
+              :visible.sync="balance"
               title="余额充值"
-              width="60%"
-              :visible.sync="balance">
+              width="60%">
             <div slot="default" style="margin-bottom: 40px;height: 180px;overflow: auto">
               <el-col :offset="4" :span="16">
-                <el-col :span="4"
-                        class="balanceClass"
-                        v-for="(item,index) in balanceSum" :key="index">
-                  <el-button type="text" @click="addBalance(index)" style="padding: 0">
+                <el-col v-for="(item,index) in balanceSum"
+                        :key="index"
+                        :span="4" class="balanceClass">
+                  <el-button style="padding: 0" type="text" @click="addBalance(index)">
                     <span
                         style="color: #3b4446;font-family:'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;font-weight: normal;">余额<span
                         style="color: #FF0036">{{ item }}</span>元</span><br><br>
@@ -90,8 +90,8 @@
                     自定义金额/元
                   </el-col>
                   <el-col :offset="1" :span="22" style="height: 30px;margin-top: 4px">
-                    <el-input v-model="balanceUserSum" @change.native="handleUserSum" class="demo-ruleForm" type="text"
-                              placeholder="100"></el-input>
+                    <el-input v-model="balanceUserSum" class="demo-ruleForm" placeholder="100" type="text"
+                              @change.native="handleUserSum"></el-input>
                   </el-col>
                 </el-col>
               </el-col>
@@ -125,21 +125,21 @@
               </el-col>
               <el-col v-else :span="14">
                 <el-col :span="15">
-                  <el-input type="text" clearable v-model="nickName1" :placeholder="userInfo.nickName"></el-input>
+                  <el-input v-model="nickName1" :placeholder="userInfo.nickName" clearable type="text"></el-input>
                 </el-col>
                 <el-col :span="4">
-                  <el-button plain size="small" class="buttonStyle" @click="updataUser">保存</el-button>
+                  <el-button class="buttonStyle" plain size="small" @click="updataUser">保存</el-button>
                 </el-col>
                 <el-col :span="4">
-                  <el-button plain size="small" class="buttonStyle" @click="nickName='';nickName1=''">取消</el-button>
+                  <el-button class="buttonStyle" plain size="small" @click="nickName='';nickName1=''">取消</el-button>
                 </el-col>
               </el-col>
-              <el-col @mouseenter.native="buttonColor='tomato'"
-                      @mouseleave.native="buttonColor='#ffffff'"
-                      :span="10"
-                      style="text-align: left;font-size: small">
+              <el-col :span="10"
+                      style="text-align: left;font-size: small"
+                      @mouseenter.native="buttonColor='tomato'"
+                      @mouseleave.native="buttonColor='#ffffff'">
                 <el-button v-if="buttonColor==='tomato'" :style="{color:buttonColor}"
-                           @click="nickName = userInfo.nickName;" type="text">
+                           type="text" @click="nickName = userInfo.nickName;">
                   <i class="el-icon-edit">编辑</i>
                 </el-button>
               </el-col>
@@ -167,8 +167,8 @@
             </el-col>
             <el-col :span="20">
               <el-col
-                  :span="1"
                   v-if="!sexRadio"
+                  :span="1"
                   style="font-size: small; text-align: left;"
                   @mouseenter.native="sex=4"
                   @mouseleave.native="sex=-1">
@@ -180,19 +180,19 @@
                   <el-radio v-model="sex" label="1">女</el-radio>
                 </el-col>
                 <el-col :span="4">
-                  <el-button plain size="small" @click="updataUser" class="buttonStyle">保存</el-button>
+                  <el-button class="buttonStyle" plain size="small" @click="updataUser">保存</el-button>
                 </el-col>
                 <el-col :span="4">
-                  <el-button plain size="small" class="buttonStyle" @click="sexRadio=false">取消</el-button>
+                  <el-button class="buttonStyle" plain size="small" @click="sexRadio=false">取消</el-button>
                 </el-col>
               </el-col>
-              <el-col @mouseenter.native="sex=4"
-                      @mouseleave.native="sex=-1"
-                      :span="10"
-                      style="text-align: left;font-size: small">
+              <el-col :span="10"
+                      style="text-align: left;font-size: small"
+                      @mouseenter.native="sex=4"
+                      @mouseleave.native="sex=-1">
                 <el-button
                     v-if="sex===4&&sexRadio===false"
-                    style="color: #de4949" @click="sexRadio=true" type="text">
+                    style="color: #de4949" type="text" @click="sexRadio=true">
                   <i class="el-icon-edit">编辑</i>
                 </el-button>
               </el-col>
@@ -214,27 +214,27 @@
               </el-col>
               <el-col v-if="phoneNumber" :span="14">
                 <el-col :span="15">
-                  <el-input type="text" clearable v-model.lazy="phoneNumber1"
-                            :placeholder="userInfo.phonenumber"></el-input>
+                  <el-input v-model.lazy="phoneNumber1" :placeholder="userInfo.phonenumber" clearable
+                            type="text"></el-input>
                 </el-col>
                 <el-col :span="4">
-                  <el-button plain size="small" @click="updataUser" class="buttonStyle">保存</el-button>
+                  <el-button class="buttonStyle" plain size="small" @click="updataUser">保存</el-button>
                 </el-col>
                 <el-col :span="4">
-                  <el-button plain size="small" class="buttonStyle"
+                  <el-button class="buttonStyle" plain size="small"
                              @click="phoneNumber='';phoneNumber1='';phoneFlag=false">取消
                   </el-button>
                 </el-col>
               </el-col>
               <el-col :span="10"
+                      style="text-align: left;font-size: small;height: 40px;"
                       @mouseenter.native="phoneFlag=true"
-                      @mouseleave.native="phoneFlag=false"
-                      style="text-align: left;font-size: small;height: 40px;">
+                      @mouseleave.native="phoneFlag=false">
                 <el-button
                     v-if="(!phoneNumber)&&phoneFlag"
-                    @click="phoneNumber=userInfo.phonenumber"
+                    style="color: #de4949"
                     type="text"
-                    style="color: #de4949">
+                    @click="phoneNumber=userInfo.phonenumber">
                   <i class="el-icon-edit">编辑</i>
                 </el-button>
               </el-col>
@@ -256,25 +256,25 @@
               </el-col>
               <el-col v-if="email" :span="14">
                 <el-col :span="15">
-                  <el-input type="text" clearable v-model.lazy="email1" :placeholder="userInfo.email"></el-input>
+                  <el-input v-model.lazy="email1" :placeholder="userInfo.email" clearable type="text"></el-input>
                 </el-col>
                 <el-col :span="4">
-                  <el-button plain size="small" @click="updataUser" class="buttonStyle">保存</el-button>
+                  <el-button class="buttonStyle" plain size="small" @click="updataUser">保存</el-button>
                 </el-col>
                 <el-col :span="4">
-                  <el-button plain size="small" class="buttonStyle" @click="email='';email1='';emailFlag=false">取消
+                  <el-button class="buttonStyle" plain size="small" @click="email='';email1='';emailFlag=false">取消
                   </el-button>
                 </el-col>
               </el-col>
               <el-col :span="10"
+                      style="text-align: left;font-size: small;height: 40px;"
                       @mouseenter.native="emailFlag=true"
-                      @mouseleave.native="emailFlag=false"
-                      style="text-align: left;font-size: small;height: 40px;">
+                      @mouseleave.native="emailFlag=false">
                 <el-button
                     v-if="(email==='')&&emailFlag"
-                    @click="email=userInfo.email"
+                    style="color: #de4949"
                     type="text"
-                    style="color: #de4949">
+                    @click="email=userInfo.email">
                   <i class="el-icon-edit">编辑</i>
                 </el-button>
               </el-col>
@@ -292,10 +292,10 @@
           </el-col>
           <!--          修改地址-->
           <el-dialog
+              :visible.sync="madFlag"
               title="修改地址"
-              width="60%"
               top="10px"
-              :visible.sync="madFlag">
+              width="60%">
             <div slot="default">
               <el-col :span="24">
                 <el-col :span="24" style="height: 40px; line-height: 40px;">
@@ -303,13 +303,13 @@
                     用户名：
                   </el-col>
                   <el-col :span="15">
-                    <el-input type="text"
+                    <el-input v-model="addrForm.nickName"
                               :maxlength="15"
                               :minlength="6"
-                              show-word-limit
+                              :placeholder="userAddrInfo[addrId].name"
                               clearable
-                              v-model="addrForm.nickName"
-                              :placeholder="userAddrInfo[addrId].name"></el-input>
+                              show-word-limit
+                              type="text"></el-input>
                   </el-col>
                 </el-col>
                 <el-col :span="24" style="margin-top: 20px;height: 40px; line-height: 40px;">
@@ -317,11 +317,11 @@
                     手机号：
                   </el-col>
                   <el-col :span="15">
-                    <el-input type="text"
+                    <el-input v-model="addrForm.mobile"
                               :maxlength="11"
-                              show-word-limit
+                              :placeholder="userAddrInfo[this.addrId].mobile"
                               clearable
-                              v-model="addrForm.mobile" :placeholder="userAddrInfo[this.addrId].mobile"></el-input>
+                              show-word-limit type="text"></el-input>
                   </el-col>
                 </el-col>
               </el-col>
@@ -343,10 +343,10 @@
           </el-dialog>
           <!--          新建地址-->
           <el-dialog
+              :visible.sync="newAddr"
               title="新建地址"
-              width="60%"
               top="10px"
-              :visible.sync="newAddr">
+              width="60%">
             <div slot="default">
               <el-col :span="24">
                 <el-col :span="24" style="height: 40px; line-height: 40px;">
@@ -354,13 +354,13 @@
                     用户名：
                   </el-col>
                   <el-col :span="15">
-                    <el-input type="text"
+                    <el-input v-model="addrForm.nickName"
                               :maxlength="15"
                               :minlength="6"
-                              show-word-limit
                               clearable
-                              v-model="addrForm.nickName"
-                              placeholder="请输入收件人姓名..."></el-input>
+                              placeholder="请输入收件人姓名..."
+                              show-word-limit
+                              type="text"></el-input>
                   </el-col>
                 </el-col>
                 <el-col :span="24" style="margin-top: 20px;height: 40px; line-height: 40px;">
@@ -368,12 +368,12 @@
                     手机号：
                   </el-col>
                   <el-col :span="15">
-                    <el-input type="text"
+                    <el-input v-model="addrForm.mobile"
                               :maxlength="11"
-                              show-word-limit
                               clearable
-                              v-model="addrForm.mobile"
-                              placeholder="请输入手机号..."></el-input>
+                              placeholder="请输入手机号..."
+                              show-word-limit
+                              type="text"></el-input>
                   </el-col>
                 </el-col>
               </el-col>
@@ -409,9 +409,9 @@
                       </el-tooltip>
                     </el-col>
                   </el-col>
-                  <el-col :span="9" :offset="2" v-if="userAddrInfo!=null" v-for="(item,index) in userAddrInfo"
-                          :key="index">
-                    <el-descriptions :column="2" size="mini" border>
+                  <el-col v-for="(item,index) in userAddrInfo" v-if="userAddrInfo!=null" :key="index" :offset="2"
+                          :span="9">
+                    <el-descriptions :column="2" border size="mini">
                       <template slot="title">
                         <span>
                            地址{{ index + 1 }}
@@ -425,12 +425,12 @@
                             </template>
                             <el-menu-item index="1-1">
                               <el-menu-item index="2">
-                                <el-button type="text" size="mini" @click="deleteAddr(index)">删除</el-button>
+                                <el-button size="mini" type="text" @click="deleteAddr(index)">删除</el-button>
                               </el-menu-item>
                             </el-menu-item>
                             <el-menu-item index="1-2">
                               <el-menu-item index="2">
-                                <el-button type="text" size="mini" @click="handleAddr(index)">修改</el-button>
+                                <el-button size="mini" type="text" @click="handleAddr(index)">修改</el-button>
                               </el-menu-item>
                             </el-menu-item>
                           </el-submenu>
@@ -473,31 +473,31 @@
                  </span>
                 </template>
                 <el-col :span="24">
-                  <el-col style="margin-top: 15px;line-height: 40px" :offset="4" :span="16">
+                  <el-col :offset="4" :span="16" style="margin-top: 15px;line-height: 40px">
                     <el-col :span="4">
                       原密码
                     </el-col>
                     <el-col :span="20">
-                      <el-input placeholder="请输入密码..." v-model="oldPassword" clearable
-                                @change.native="checkPasswordHandle" show-password></el-input>
+                      <el-input v-model="oldPassword" clearable placeholder="请输入密码..."
+                                show-password @change.native="checkPasswordHandle"></el-input>
                     </el-col>
                   </el-col>
-                  <el-col style="margin-top: 15px;line-height: 40px" :offset="4" :span="16">
+                  <el-col :offset="4" :span="16" style="margin-top: 15px;line-height: 40px">
                     <el-col :span="4">
                       新密码
                     </el-col>
                     <el-col :span="20">
-                      <el-input :disabled="checkpassword" clearable placeholder="请输入新密码..." v-model="newPassword1"
+                      <el-input v-model="newPassword1" :disabled="checkpassword" clearable placeholder="请输入新密码..."
                                 show-password></el-input>
                     </el-col>
                   </el-col>
-                  <el-col style="margin-top: 15px;line-height: 40px;margin-bottom: 15px" :offset="4" :span="16">
+                  <el-col :offset="4" :span="16" style="margin-top: 15px;line-height: 40px;margin-bottom: 15px">
                     <el-col :span="4">
                       重复密码
                     </el-col>
                     <el-col :span="20">
-                      <el-input :disabled="checkpassword" clearable @change.native="updataPassword"
-                                placeholder="重复请输入新密码..." v-model="newPassword2" show-password></el-input>
+                      <el-input v-model="newPassword2" :disabled="checkpassword" clearable
+                                placeholder="重复请输入新密码..." show-password @change.native="updataPassword"></el-input>
                     </el-col>
                   </el-col>
                 </el-col>
@@ -511,6 +511,7 @@
 </template>
 <script>
 import {getRequest, postRequest} from "@/apis/api";
+
 let addrData = [];
 export default {
   name: "myInfo",
@@ -745,8 +746,8 @@ export default {
     updataUser() {
       postRequest("/updataUser", {
         id: this.userInfo.id,
-        nickName: this.nickName == '' ? undefined : this.nickName,
-        sex: this.sex === -1 ? undefined : this.sex,
+        nickName: this.nickName1 == '' ? undefined : this.nickName1,
+        sex: this.sex1 === -1 ? undefined : this.sex1,
         phoneNumber: this.phoneNumber1 == '' ? undefined : this.phoneNumber1,
         email: this.email1 == '' ? undefined : this.email1
       }).then(respon => {

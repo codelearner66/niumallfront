@@ -1,37 +1,37 @@
 <template>
   <el-row>
     <el-divider></el-divider>
-    <el-col :span="24" v-if="flag"></el-col>
+    <el-col v-if="flag" :span="24"></el-col>
     <el-col v-if="!flag" :offset=3 :span="18">
       <el-col :span="24">
         <el-tabs type="border-card">
           <el-tab-pane>
             <span slot="label"><i class="el-icon-suitcase"></i>所有订单</span>
             <el-col :span="24" style="height: 600px;">
-              <order :pages="allOrder.current" :orders="allOrder.records"></order>
+              <order :orders="allOrder.records" :pages="allOrder.current"></order>
             </el-col>
             <el-col :span="24" style="margin-top: 10px">
               <el-pagination
-                  layout="prev, pager, next"
-                  background
                   :current-page="Number.parseInt(allOrder.current)"
-                  @current-change="handlerAllOrder"
-                  :total="Number.parseInt(allOrder.total)">
+                  :total="Number.parseInt(allOrder.total)"
+                  background
+                  layout="prev, pager, next"
+                  @current-change="handlerAllOrder">
               </el-pagination>
             </el-col>
           </el-tab-pane>
           <el-tab-pane>
             <span slot="label"><i class="el-icon-suitcase"></i> 未支付</span>
             <el-col :span="24" style="height: 600px;">
-              <order :pages="noPay.current" :orders="noPay.records"></order>
+              <order :orders="noPay.records" :pages="noPay.current"></order>
             </el-col>
             <el-col :span="24" style="margin-top: 10px">
               <el-pagination
-                  layout="prev, pager, next"
-                  background
                   :current-page="Number.parseInt(noPay.current)"
-                  @current-change="handleCurrentChange"
-                  :total="Number.parseInt(noPay.total)">
+                  :total="Number.parseInt(noPay.total)"
+                  background
+                  layout="prev, pager, next"
+                  @current-change="handleCurrentChange">
               </el-pagination>
             </el-col>
           </el-tab-pane>
@@ -40,16 +40,16 @@
             <i class="el-icon-collection"></i> 已付款
           </span>
             <el-col :span="24" style="height: 600px;">
-              <order :pages="payed.current" :orders="payed.records"></order>
+              <order :orders="payed.records" :pages="payed.current"></order>
             </el-col>
             <el-col :span="24" style="margin-top: 10px">
               <el-pagination
-                  style="font-size: large"
+                  :current-page="Number.parseInt(payed.current)"
+                  :total="Number.parseInt(payed.total)"
                   background
                   layout="prev, pager, next"
-                  :current-page="Number.parseInt(payed.current)"
-                  @current-change="handleCurrentChangePayed"
-                  :total="Number.parseInt(payed.total)">
+                  style="font-size: large"
+                  @current-change="handleCurrentChangePayed">
               </el-pagination>
             </el-col>
           </el-tab-pane>
@@ -58,16 +58,16 @@
             <i class="el-icon-truck"></i> 待收货
           </span>
             <el-col :span="24" style="height: 600px;">
-              <order :pages="OrderShopped.current" :orders="OrderShopped.records"></order>
+              <order :orders="OrderShopped.records" :pages="OrderShopped.current"></order>
             </el-col>
             <el-col :span="24" style="margin-top: 10px">
               <el-pagination
-                  style="font-size: large"
+                  :current-page="Number.parseInt(OrderShopped.current)"
+                  :total="Number.parseInt(OrderShopped.total)"
                   background
                   layout="prev, pager, next"
-                  :current-page="Number.parseInt(OrderShopped.current)"
-                  @current-change="handleOrderUnshopped"
-                  :total="Number.parseInt(OrderShopped.total)">
+                  style="font-size: large"
+                  @current-change="handleOrderUnshopped">
               </el-pagination>
             </el-col>
           </el-tab-pane>
@@ -76,16 +76,16 @@
             <i class="el-icon-chat-line-square"></i> 退款/售后
           </span>
             <el-col :span="24" style="height: 600px;">
-              <order :pages="OrderProcessing.current" :orders="OrderProcessing.records"></order>
+              <order :orders="OrderProcessing.records" :pages="OrderProcessing.current"></order>
             </el-col>
             <el-col :span="24" style="margin-top: 10px">
               <el-pagination
-                  style="font-size: large"
+                  :current-page="Number.parseInt(OrderProcessing.current)"
+                  :total="Number.parseInt(OrderProcessing.total)"
                   background
                   layout="prev, pager, next"
-                  :current-page="Number.parseInt(OrderProcessing.current)"
-                  @current-change="handlerOrderProcessing"
-                  :total="Number.parseInt(OrderProcessing.total)">
+                  style="font-size: large"
+                  @current-change="handlerOrderProcessing">
               </el-pagination>
             </el-col>
           </el-tab-pane>

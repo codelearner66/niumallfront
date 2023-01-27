@@ -1,11 +1,11 @@
 <template>
   <el-row id="header-back">
     <el-col :span="2">
-      <img src="../assets/logo.png" style="height: 40px;width: 106px" alt="logo图标"/>
+      <img alt="logo图标" src="../assets/logo.png" style="height: 40px;width: 106px"/>
     </el-col>
-    <el-col :offset="3" :span="18" id="header">
+    <el-col id="header" :offset="3" :span="18">
       <el-col :span="2">
-        <router-link to="/" class="router-header">
+        <router-link class="router-header" to="/">
           &nbsp;<span class="headerspan"><i class="el-icon-s-home" style="color: hotpink"/>首页</span>
         </router-link>
       </el-col>
@@ -15,40 +15,40 @@
         </span>
       </el-col>
       <el-col :span="2">
-        <el-button v-if="!this.$store.getters.getIsLogin" @click="loginbuton" type="text" class="router-header">
+        <el-button v-if="!this.$store.getters.getIsLogin" class="router-header" type="text" @click="loginbuton">
           <span class="headerspan">请登录...</span>
         </el-button>
       </el-col>
       <el-col :span="1">
-        <el-button v-if="!this.$store.getters.getIsLogin" @click="register" type="text" class="router-header">
+        <el-button v-if="!this.$store.getters.getIsLogin" class="router-header" type="text" @click="register">
           <span class="headerspan">免费注册</span>
         </el-button>
       </el-col>
       <el-col :offset="this.$store.getters.getIsLogin?5:2" :span="2">
-        <router-link to="/myInfo" class="router-header" type="text">
+        <router-link class="router-header" to="/myInfo" type="text">
           <span class="headerspan"><i class="el-icon-user" style="color: hotpink"/> 我的信息</span>
         </router-link>
       </el-col>
       <el-col :span="2">
-        <router-link to="/shopCartList" class="router-header">
+        <router-link class="router-header" to="/shopCartList">
           <i class="el-icon-shopping-cart-2" style="color: hotpink"></i> <span class="headerspan">购物车</span>
         </router-link>
       </el-col>
       <el-col :span="2">
-        <router-link to="/myOrders" class="router-header">
+        <router-link class="router-header" to="/myOrders">
           <span class="headerspan"> <i class="el-icon-s-order" style="color: hotpink"></i> 我的订单</span>
         </router-link>
       </el-col>
       <el-col :span="2">
-        <router-link to="/message" class="router-header">
-          <el-badge :hidden="this.$store.getters.getMessageCount==0" :value="this.$store.getters.getMessageCount"
+        <router-link class="router-header" to="/message">
+          <el-badge :hidden="this.$store.getters.getMessageCount == 0" :value="this.$store.getters.getMessageCount"
                     class="headerspan"><i class="el-icon-s-comment"
                                           style="color: hotpink"></i> 消息
           </el-badge>
         </router-link>
       </el-col>
       <el-col :span="2">
-        <el-button v-if="this.$store.getters.getIsLogin" @click="logout" type="text" style="padding: 0 0 0 0;">
+        <el-button v-if="this.$store.getters.getIsLogin" style="padding: 0 0 0 0;" type="text" @click="logout">
           <span class="headerspan"> <i class="el-icon-close" style="color: hotpink"></i> 登出</span>
         </el-button>
       </el-col>
@@ -72,6 +72,7 @@ export default {
   created() {
     this.getMessageNum();
   },
+
   methods: {
     loginbuton() {
       router.push("login");

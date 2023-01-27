@@ -67,12 +67,16 @@
             label="数量"
             align="center"
             width="100">
-          <p>1</p>
+          <template slot-scope="scope">
+            <p>
+              {{ scope.row.payment / goods[scope.$index].price }}
+            </p>
+          </template>
         </el-table-column>
         <el-table-column
             label="支付状态"
             align="center"
-            width="180">
+            width="120">
           <template slot-scope="scope">
             <el-col :span="24">
               <span style="color: #FF0036">{{ orderStatus[scope.row.orderStatus - 1] }}</span>
@@ -168,7 +172,7 @@
             </el-col>
             <!--            售后-->
             <el-col :span="24" v-if="scope.row.orderStatus===8||scope.row.orderStatus===10">
-              <el-button @click="handleClick(scope.row)" type="text" size="small">联系客服</el-button>
+              <el-button @click="contactService()" type="text" size="small">联系客服</el-button>
             </el-col>
             <el-col :span="24" v-if="scope.row.orderStatus===9">
               <el-button @click="handleClick(scope.row)" type="text" size="small">完成订单</el-button>
@@ -182,6 +186,7 @@
 </template>
 <script>
 import {getRequest, postRequest} from "@/apis/api";
+import router from "@/router";
 
 export default {
   name: "order",
@@ -320,6 +325,9 @@ export default {
       });
       // 复制成功后再将构造的标签 移除
       document.body.removeChild(cInput);
+    },
+    contactService() {
+      router.push("message");
     }
   }
 }

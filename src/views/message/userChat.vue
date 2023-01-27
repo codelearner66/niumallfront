@@ -82,7 +82,7 @@ import {getRequest, postRequest} from "@/apis/api";
 import {webSocket} from "@/apis/webSocket";
 import success from "@/views/goods/success";
 
-
+//todo 固定 客服位置和 快捷命令
 let websocket = null;
 let pages = 0;
 //当前窗口用户

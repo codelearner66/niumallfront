@@ -3,8 +3,8 @@
     <el-col :span="24">
       <el-col :span="18" :offset="3"
               style="max-height: 300px;height: 100px;border: 1px solid #aaca;padding: 5px 5px 5px 5px">
-        <el-col :span="1"><span style="color: tomato;font-size: medium;padding-left: 10px;">品牌: </span></el-col>
-        <el-col :span="21">
+        <el-col :span="2"><span style="color: tomato;font-size: medium;padding-left: 10px;">品牌: </span></el-col>
+        <el-col :span="20">
           <el-checkbox-group v-model="checkedCategory" size="small">
             <el-tooltip class="item" effect="light" :content="item.goodsCategoryDescribe" placement="top"
                         v-for="(item,index) in childrenData" :key="index">
@@ -85,9 +85,9 @@ export default {
       flag: false
     }
   },
-  comments() {
-    goods:goods
-  },
+  // comments() {
+  //   goods: goods
+  // },
   created() {
     this.pid = this.$route.params.pid;
     console.log(this.pid);
