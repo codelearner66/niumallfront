@@ -1,21 +1,21 @@
 <template>
   <el-row id="goodsMain">
-    <el-col :span="4" class="goodsStyle"
-            v-for="(item,index) in goodsList" :key="index"
+    <el-col v-for="(item,index) in goodsList" :key="index"
+            :span="4" class="goodsStyle"
             @mouseenter.native="handleEnter(index)"
             @mouseleave.native="handleLeave(index)">
       <el-col :span="24" style="height: 270px">
         <router-link :to="{name:'goodsDetails',params:{id:item.id}}">
-          <img width="100%" height="100%" style="border-radius: 10px" :src="item.homeRecommendedImages" alt="展示图片">
+          <img :src="item.homeRecommendedImages" alt="展示图片" height="100%" style="border-radius: 10px" width="100%">
         </router-link>
       </el-col>
 
       <el-col :span="24" style="height: 60px">
         <el-col style="margin-top: 4px">
          <span style="font-size:smaller">
-           <el-tooltip class="item" effect="light" :content="item.simpleDesc" placement="right-end">
-             <router-link :to="{name:'goodsDetails',params:{id:item.id}}"
-                          :class="[flag[index] ? 'navClassHover' : 'navClass']">
+           <el-tooltip :content="item.simpleDesc" class="item" effect="light" placement="right-end">
+             <router-link :class="[flag[index] ? 'navClassHover' : 'navClass']"
+                          :to="{name:'goodsDetails',params:{id:item.id}}">
               {{ item.simpleDesc | ellipsis }}
              </router-link>
            </el-tooltip>
@@ -23,7 +23,7 @@
         </el-col>
         <el-col :span="24">
           <router-link :to="{name:'goodsDetails',params:{id:item.id}}" class="navClass navPrices">
-            <p class="navPrices" style="width: 100%;" :style="{color:changeColor[index]}">
+            <p :style="{color:changeColor[index]}" class="navPrices" style="width: 100%;">
               <i class="icon-renminbi1688">{{ item.price }} <span>起</span></i>
               <span style="float:right; margin-left:20%">
               <i class="el-icon-view">  {{ item.accessCount }}</i>

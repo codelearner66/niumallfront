@@ -747,7 +747,7 @@ export default {
       postRequest("/updataUser", {
         id: this.userInfo.id,
         nickName: this.nickName1 == '' ? undefined : this.nickName1,
-        sex: this.sex1 === -1 ? undefined : this.sex1,
+        sex: this.sex === -1 ? undefined : this.sex,
         phoneNumber: this.phoneNumber1 == '' ? undefined : this.phoneNumber1,
         email: this.email1 == '' ? undefined : this.email1
       }).then(respon => {

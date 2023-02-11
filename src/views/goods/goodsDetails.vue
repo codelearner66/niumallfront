@@ -516,6 +516,11 @@ export default {
         });
         return;
       }
+
+      if (this.goodsData.inventory < this.num) {
+        this.fullscreenLoading = false;
+        return this.$message.error("购买数量超过库存数量");
+      }
       if (this.payType === 1) {
         postRequest("/pay/api/trade/aliPay", {
           goodsId: this.id,

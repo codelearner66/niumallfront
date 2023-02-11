@@ -14,15 +14,15 @@ const service = axios.create({
     timeout: 5000
 });
 // 添加超时后的处理（axios中需要你根据error信息来进行判断）
-axios().catch(error => {
-    const {message} = error;
-    if (error.code === 'ECONNABORTED' && message.indexOf('timeout') > -1) {
-        // 超时处理，可以直接弹出错误或者重新发起一次请求
-        Message.error({message:"请求超时！请检查网络问题"});
-    }
-    // 若不是超时,则返回未错误信息
-    return Promise.reject(error);
-})
+// axios().catch(error => {
+//     const {message} = error;
+//     if (error.code === 'ECONNABORTED' && message.indexOf('timeout') > -1) {
+//         // 超时处理，可以直接弹出错误或者重新发起一次请求
+//         Message.error({message:"请求超时！请检查网络问题"});
+//     }
+//     // 若不是超时,则返回未错误信息
+//     return Promise.reject(error);
+// })
 
 //结果拦截
 /**
@@ -38,6 +38,8 @@ service.interceptors.response.use(success => {
     }
        //响应数据出错时 统一操作
         if (success.data.code == 1003) {
+            localStorage.removeItem("token");
+            Cookies.remove("token");
             //如果是首页时 不进行提示
             if (success.config.url === "/getUserInfor") {
                 return;
@@ -46,8 +48,6 @@ service.interceptors.response.use(success => {
             setTimeout(() => {
                 router.push("/login")
             }, 1000);
-            localStorage.removeItem("token");
-            Cookies.remove("token");
         } else {
             return success.data;
         }

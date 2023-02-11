@@ -4,18 +4,20 @@
       <!--    侧边导航-->
       <el-col :span="3" class="common">
         <h5 style="color: tomato">主题市场</h5>
-        <el-col :span="24" v-for="(item,index) in navData" :key="index">
-          <router-link class="main_nav" :to="{path:path[index]}" style="text-decoration: none">
-            {{ item.goodsCategoryName }}
-          </router-link>
+        <el-col :span="24" class="infinite-list" style="overflow-y: auto;height: 360px;">
+          <el-col v-for="(item,index) in navData" :key="index" :span="24">
+            <router-link :to="{path:path[index]}" class="main_nav" style="text-decoration: none;">
+              {{ item.goodsCategoryName }}
+            </router-link>
+          </el-col>
         </el-col>
       </el-col>
       <!--    轮播导航-->
       <el-col :span="17" class="common" style="background-color: #e8e6e6;">
-        <el-carousel type="card" :interval="5000" height="450px">
+        <el-carousel :interval="5000" height="450px" type="card">
           <el-carousel-item v-for="(item,index) in slideShow" :key="index">
             <router-link :to="{name:'goodsDetails',params:{id:slideShowPath[index]}}">
-              <img :src="item" style="width: 100%;height: 100%" alt="轮播图">
+              <img :src="item" alt="轮播图" style="width: 100%;height: 100%">
             </router-link>
           </el-carousel-item>
         </el-carousel>
@@ -23,10 +25,10 @@
       <!--    头像/公告-->
       <el-col :span="4" style=" height: 400px">
         <el-col :span="24" style="margin-top: 45px">
-          <el-avatar shape="square" :size="50" :src="headerPath" alt="用户头像" fit="fill"></el-avatar>
+          <el-avatar :size="50" :src="headerPath" alt="用户头像" fit="fill" shape="square"></el-avatar>
         </el-col>
         <el-col :span="24" style="margin-top: 20px">
-          <router-link class="main_nav" to="/myInfor" style="font-size: x-small">Hi: {{ this.userInfor.nickName }}
+          <router-link class="main_nav" style="font-size: x-small" to="/myInfor">Hi: {{ this.userInfor.nickName }}
           </router-link>
         </el-col>
         <el-col :span="24" style="margin-top: 20px">
@@ -34,7 +36,7 @@
             <span style="color: tomato;font-size: medium;padding-left: 10px; ">公告: </span>新鲜事儿都在这里～ <br>
             <el-col :span="24" style="margin-top: 8px">
               <el-tag size="mini" type="danger">消息</el-tag>
-              <el-link type="info"
+              <el-link :show-overflow-tooltip="true"
                        :underline="false"
                        style="margin-left: 8px;
                             width:70%;
@@ -43,9 +45,56 @@
                                    overflow: hidden;
                                    text-overflow: ellipsis;
                                    font-size: 5pt;"
-                       :show-overflow-tooltip="true">
-                <marquee>信息链接信息链接信息链接信信息信息息链接</marquee>
+                       type="info">
+                <marquee>当心电信诈骗，注意保护个人财产！
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  请勿向其他人泄露支付密码，不要轻易相信私人帐号。
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  预祝您购物愉快，阖家欢乐！
+                </marquee>
               </el-link>
+            </el-col>
+            <el-col :span="24">
+              <el-col v-for="(item,index) in notificationList" :key="index">
+                <li style="line-height: 22px;list-style-type:none">
+                  <a href='javaScript:void(0)' style="text-decoration: none;color: #de5a8d;padding-left: 5px"
+                     @click='handleDialogNotification(item)'>
+                    <span class='message-title'>{{ item.title }}</span>
+                  </a>
+                  <span style="float: right;margin-right: 5px">
+                    <el-badge class="item" is-dot>
+                    {{ Math.floor(Math.random() * 100000) }} <el-icon class="el-icon-view"></el-icon>
+                  </el-badge>
+                  </span>
+
+                </li>
+              </el-col>
+              <el-drawer
+                  :visible.sync="dialogNotificationVisible"
+                  direction="rtl"
+                  size="50%">
+                <div style='width: 95%;margin:  0 auto'>
+                  <mavon-editor
+                      ref='mld'
+                      :subfield='false'
+                      :toolbarsFlag='false'
+                      codeStyle='monokai'
+                      default_open='preview'
+                      style='min-height: 600px'
+                      v-html='dialogNotificationData.html'
+                  />
+                </div>
+                <template slot="title">
+                  <span style="color: #de4949;font-size: 20px">公告</span>
+                </template>
+                <div class="demo-drawer__footer" style="margin-top: 40px;">
+                  <div style="height: 30px;">
+                    <el-button style="margin-left: 70px" type="primary" @click="handleDialogNotification">确 定
+                    </el-button>
+                  </div>
+
+                </div>
+              </el-drawer>
             </el-col>
 
           </el-col>
@@ -61,6 +110,8 @@
 </template>
 
 <script>
+import {mavonEditor} from 'mavon-editor';
+import 'mavon-editor/dist/css/index.css';
 import {getRequest} from "@/apis/api";
 
 export default {
@@ -73,13 +124,27 @@ export default {
       userInfor: {},
       headerPath: '',
       slideShow: [],
-      slideShowPath: []
+      slideShowPath: [],
+
+      //预览对话框
+      dialogNotificationVisible: false,
+      //预览对话框数据
+      dialogNotificationData: {},
+      notificationList: [],
     };
   },
   created() {
     this.getNavData();
     this.getUserInfor();
     this.getSlideShow();
+    getRequest('/getModifyNotification', {}).then(response => {
+      if (response.code === 200) {
+        this.notificationList = response.data;
+      }
+    });
+  },
+  components: {
+    mavonEditor
   },
   methods: {
     //获取分类导航
@@ -115,7 +180,15 @@ export default {
 
         console.log(response.data);
       })
-    }
+    },
+    handleDialogNotification(item) {
+      this.dialogNotificationVisible = !this.dialogNotificationVisible;
+      if (this.dialogNotificationVisible) {
+        this.dialogNotificationData = item;
+      } else {
+        this.dialogNotificationData = {};
+      }
+    },
   }
 }
 </script>
@@ -129,6 +202,10 @@ export default {
   color: #2c3e50;
   text-decoration: none;
   line-height: 40px;
+}
+
+.infinite-list::-webkit-scrollbar {
+  display: none;
 }
 
 .main_nav:hover {
