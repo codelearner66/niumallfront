@@ -124,6 +124,15 @@ const routes = [
         component: () => import('../views/404')
     },
     {
+        path: "/userComment",
+        name: "userComment",
+        meta: {
+            title: "评论",
+            requiresAuth: true
+        },
+        component: () => import('../views/comments/userComment.vue')
+    },
+    {
         path: "/500",
         name: "500",
         meta: {
@@ -163,6 +172,7 @@ router.beforeEach((to, from, next) => {
 // 后置守卫 修改页头
 router.afterEach((to, from) => {
     document.title = to.meta.title;
+    window.scrollTo(0, 0)
 })
 
 export default router

@@ -4,27 +4,30 @@
     <el-col :offset="3" :span="18" style="margin-top: 20px">
       <!--  展示大图-->
       <el-col :span="8" style="height: 420px; border: 1px solid #d34886;border-radius: 10px;padding: 1px">
-        <el-col :span="24" v-show="flag">
+        <el-col v-show="flag" :span="24">
           <el-col :span="24" style="position: relative">
-            <img width="100%" height="414px" style="border-radius: 10px" :src="goodsData.homeRecommendedImages"
-                 alt="商品图片">
+            <img :src="goodsData.homeRecommendedImages" alt="商品图片" height="414px" style="border-radius: 10px"
+                 width="100%">
             <el-col :span="2" style="position: absolute; left:8px;top:375px">
-              <el-button type="text" @click="changePhotoToVideo"
-                         style="text-decoration: none;padding: 0;margin: 0; color: tomato; font-size: 30px">
+              <el-button style="text-decoration: none;padding: 0;margin: 0; color: tomato; font-size: 30px" type="text"
+                         @click="changePhotoToVideo">
                 <i class="el-icon-video-play"/>
               </el-button>
             </el-col>
           </el-col>
         </el-col>
-        <el-col :span="24" v-show="!flag">
+        <el-col v-show="!flag" :span="24">
           <el-col :span="24" style="height: 13px;">
-            <el-button type="text" @click="changeFlag"
-                       style="width: 4px;margin: 0 3.8% 0 0;padding: 0;z-index: 1000; float: right; font-size: 20px; text-decoration: none;color: #de4949">
+            <el-button
+                style="width: 4px;margin: 0 3.8% 0 0;padding: 0;z-index: 1000; float: right; font-size: 20px; text-decoration: none;color: #de4949"
+                type="text"
+                @click="changeFlag">
               <i class="el-icon-close"/>
             </el-button>
           </el-col>
-          <video width="100%" height="400px" :src="goodsData.video" :poster="goodsData.homeRecommendedImages" controls
-                 style="border-radius: 10px">
+          <video :poster="goodsData.homeRecommendedImages" :src="goodsData.video" controls height="400px"
+                 style="border-radius: 10px"
+                 width="100%">
             <source :src="goodsData.video" type="video/mp4"/>
           </video>
         </el-col>
@@ -38,7 +41,7 @@
           <el-col :span="24"
                   style="background-color: #fbfbfb;height: 135px;border:1px solid #cc5353; border-radius: 4px;box-shadow: #de4949 0 0 10px;">
             <el-col :offset="2" :span="4">
-              <img src="../../assets/logo.png" style="height: 40px;width: 106px" alt="logo图标"/>
+              <img alt="logo图标" src="../../assets/logo.png" style="height: 40px;width: 106px"/>
             </el-col>
             <el-col :span="15">
               <span style="line-height: 40px; font-size: small">商品热卖中,请尽快购买...</span>
@@ -67,7 +70,7 @@
                 </el-col>
                 <el-col :span="20" style="font-size: small;text-align: left">
                   广西河池 - 至
-                  <el-button type="text" style="color:black;padding: 0;margin: 0;" @click="handleVisible(0,true,true)">
+                  <el-button style="color:black;padding: 0;margin: 0;" type="text" @click="handleVisible(0,true,true)">
                     <!--                    {{ provinces[0][radio1[0]].extName }}-->
                     <span v-if="addr!==0&&radio1.length!==4">{{ addrRadio }}</span>
                     <span v-else-if="radio1.length==4">{{ provinces[0][radio1[0]].extName }}</span>
@@ -81,31 +84,31 @@
                   </span>
                   <!--                  省选择-->
                   <el-dialog
-                      title="省份"
+                      :before-close="handleClose"
                       :visible.sync="dialogVisible[0]"
-                      width="40%"
+                      title="省份"
                       top="10px"
-                      :before-close="handleClose">
+                      width="40%">
                     <div slot="default">
-                      <el-button style="float: right" type="text" @click="clearRadio" icon="el-icon-refresh-left">重置已选
+                      <el-button icon="el-icon-refresh-left" style="float: right" type="text" @click="clearRadio">重置已选
                       </el-button>
-                      <el-button style="float: right" type="text" @click="isNewAddr=!isNewAddr" icon="el-icon-plus">
+                      <el-button icon="el-icon-plus" style="float: right" type="text" @click="isNewAddr=!isNewAddr">
                         新建地址
                       </el-button>
                       <hr style="width: 100%; height:1px;border-left:none; border-bottom:none;border-top:1px solid #cad9e6;"/>
-                      <el-col :span="24" v-if="isNewAddr">
-                        <el-radio-group v-model="radio1[0]" @change="handChange(0)" size="small">
-                          <el-radio-button style="margin-top: 15px;margin-left: 5px;padding: 3px;"
-                                           v-for="(item,index) in provinces[0]" :key="index"
-                                           :label="index">{{ item.extName }}
+                      <el-col v-if="isNewAddr" :span="24">
+                        <el-radio-group v-model="radio1[0]" size="small" @change="handChange(0)">
+                          <el-radio-button v-for="(item,index) in provinces[0]"
+                                           :key="index" :label="index"
+                                           style="margin-top: 15px;margin-left: 5px;padding: 3px;">{{ item.extName }}
                           </el-radio-button>
                         </el-radio-group>
                       </el-col>
-                      <el-col :span="24" v-if="!isNewAddr">
+                      <el-col v-if="!isNewAddr" :span="24">
                         <el-radio-group v-model="addr" size="small" @change="handleAddrChange(id)">
-                          <el-radio-button style="margin-top: 15px;margin-left: 5px;padding: 3px;"
-                                           v-for="(item,index) in addrData" :key="index"
-                                           :label="item.id">
+                          <el-radio-button v-for="(item,index) in addrData"
+                                           :key="index" :label="item.id"
+                                           style="margin-top: 15px;margin-left: 5px;padding: 3px;">
                             <span style="float: left">{{ item.name }}</span><span
                               style="float: right">{{ item.mobile }}</span> <br>
                             <p>{{ item.state }}{{ item.city }}{{ item.district }} {{ item.address }}</p>
@@ -120,15 +123,15 @@
                   </el-dialog>
                   <!--                  市选择-->
                   <el-dialog
-                      title="市区"
+                      :before-close="handleClose"
                       :visible.sync="dialogVisible[1]"
-                      width="40%"
-                      :before-close="handleClose">
+                      title="市区"
+                      width="40%">
                     <div slot="default">
-                      <el-radio-group v-model="radio1[1]" @change="handChange(1)" size="small">
-                        <el-radio-button style="margin-top: 15px;margin-left: 5px;padding: 3px;"
-                                         v-for="(item,index) in provinces[1]" :key="index"
-                                         :label="index">
+                      <el-radio-group v-model="radio1[1]" size="small" @change="handChange(1)">
+                        <el-radio-button v-for="(item,index) in provinces[1]"
+                                         :key="index" :label="index"
+                                         style="margin-top: 15px;margin-left: 5px;padding: 3px;">
                           {{ item.extName }}
                         </el-radio-button>
                       </el-radio-group>
@@ -140,15 +143,15 @@
                   </el-dialog>
                   <!--                  县选择-->
                   <el-dialog
-                      title="县区"
+                      :before-close="handleClose"
                       :visible.sync="dialogVisible[2]"
-                      width="40%"
-                      :before-close="handleClose">
+                      title="县区"
+                      width="40%">
                     <div slot="default">
-                      <el-radio-group v-model="radio1[2]" @change="handChange(2)" size="small">
-                        <el-radio-button style="margin-top: 15px;margin-left: 5px;padding: 3px;"
-                                         v-for="(item,index) in provinces[2]" :key="index"
-                                         :label="index">
+                      <el-radio-group v-model="radio1[2]" size="small" @change="handChange(2)">
+                        <el-radio-button v-for="(item,index) in provinces[2]"
+                                         :key="index" :label="index"
+                                         style="margin-top: 15px;margin-left: 5px;padding: 3px;">
                           {{ item.extName }}
                         </el-radio-button>
                       </el-radio-group>
@@ -160,15 +163,15 @@
                   </el-dialog>
                   <!--                  镇选择-->
                   <el-dialog
-                      title="乡镇"
+                      :before-close="handleClose"
                       :visible.sync="dialogVisible[3]"
-                      width="40%"
-                      :before-close="handleClose">
+                      title="乡镇"
+                      width="40%">
                     <div slot="default">
-                      <el-radio-group v-model="radio1[3]" @change="handChange(3)" size="small">
-                        <el-radio-button style="margin-top: 15px;margin-left: 5px;padding: 3px;"
-                                         v-for="(item,index) in provinces[3]" :key="index"
-                                         :label="index">
+                      <el-radio-group v-model="radio1[3]" size="small" @change="handChange(3)">
+                        <el-radio-button v-for="(item,index) in provinces[3]"
+                                         :key="index" :label="index"
+                                         style="margin-top: 15px;margin-left: 5px;padding: 3px;">
                           {{ item.extName }}
                         </el-radio-button>
                       </el-radio-group>
@@ -207,8 +210,8 @@
                   产品简介：
                 </el-col>
                 <el-col :span="17">
-                  <el-tooltip class="item" effect="light" :content="goodsData.simpleDesc" placement="right-end">
-                    <router-link to="#" style="text-decoration: none; line-height: 20px;color: #2c3e50;">
+                  <el-tooltip :content="goodsData.simpleDesc" class="item" effect="light" placement="right-end">
+                    <router-link style="text-decoration: none; line-height: 20px;color: #2c3e50;" to="#">
                       {{ goodsData.simpleDesc | ellipsis }}
                     </router-link>
                   </el-tooltip>
@@ -220,11 +223,11 @@
                 </el-col>
                 <el-col :span="16">
                   <el-input-number v-model="num"
-                                   size="small"
-                                   controls-position="right"
-                                   @change="numChange"
+                                   :max="goodsData.buyMaxNumber"
                                    :min="goodsData.buyMinNumber"
-                                   :max="goodsData.buyMaxNumber">
+                                   controls-position="right"
+                                   size="small"
+                                   @change="numChange">
 
                   </el-input-number>
                   <span style="font-size: xx-small;margin-left: 20px">
@@ -242,13 +245,13 @@
               </el-col>
             </el-col>
             <el-col :span="24" style="margin-top: 20px;">
-              <el-button class="addShopCar" id="buy"
-                         @click="handlePayment"
-                         v-loading.fullscreen.lock="fullscreenLoading"
-                         size="small" plain>立即购买
+              <el-button id="buy" v-loading.fullscreen.lock="fullscreenLoading"
+                         class="addShopCar"
+                         plain
+                         size="small" @click="handlePayment">立即购买
               </el-button>&nbsp;&nbsp;&nbsp;
-              <el-button class="addShopCar" id="addShopCar" @click="addShopCart" size="small"
-                         icon="el-icon-shopping-cart-2" plain>加入购物车
+              <el-button id="addShopCar" class="addShopCar" icon="el-icon-shopping-cart-2" plain
+                         size="small" @click="addShopCart">加入购物车
               </el-button>
             </el-col>
             <el-col :span="24" style="margin-top: 10px;">
@@ -256,17 +259,17 @@
                 服务承诺 正品保证 极速退款 退货运费险 七天无理由退换
               </el-col>
               <el-col :offset="3" :span="4">
-                <el-button type="text" @click="pay=!pay"
-                           style="padding: 0;margin: 0; font-size: xx-small;color: #2c3e50">支付方式 <i v-if="pay"
-                                                                                                    class="el-icon-arrow-up"/><i
+                <el-button style="padding: 0;margin: 0; font-size: xx-small;color: #2c3e50" type="text"
+                           @click="pay=!pay">支付方式 <i v-if="pay"
+                                                     class="el-icon-arrow-up"/><i
                     v-if="!pay" class="el-icon-arrow-down"/></el-button>
-                <el-col :span="24" v-if="pay" style="position: absolute;width: 80px; height: 60px;  z-index: 1000">
-                  <el-button type="text" @click="handlePayType(0)"
-                             style="margin:4px 0 0;padding: 0; font-size: xx-small;color: #ea3783">
+                <el-col v-if="pay" :span="24" style="position: absolute;width: 80px; height: 60px;  z-index: 1000">
+                  <el-button style="margin:4px 0 0;padding: 0; font-size: xx-small;color: #ea3783" type="text"
+                             @click="handlePayType(0)">
                     <i class="el-icon-wallet"/> 账户余额
                   </el-button>
-                  <el-button type="text" @click="handlePayType(1)"
-                             style="padding: 0; font-size: xx-small; color: #ea3783;margin: 4px 0 0;"><i
+                  <el-button style="padding: 0; font-size: xx-small; color: #ea3783;margin: 4px 0 0;" type="text"
+                             @click="handlePayType(1)"><i
                       class="icon-alipay"/> 支付宝
                   </el-button>
                 </el-col>
@@ -286,16 +289,16 @@
               <hr style="height:1px;border-left:none; border-bottom:none;border-top:1px dashed #cad9e6;"/>
             </el-col>
           </el-col>
-          <el-col :span="24"
+          <el-col v-infinite-scroll="load"
+                  :span="24"
                   class="infinite-list"
-                  v-infinite-scroll="load"
                   infinite-scroll-distance="10"
                   style="height: 420px;overflow-y:auto; list-style-type: none">
-            <el-col :span="24" v-for="(item,index) in goodsList" :key="index" class="infinite-list-item"
+            <el-col v-for="(item,index) in goodsList" :key="index" :span="24" class="infinite-list-item"
                     style="margin-top: 5px;height:160px">
               <el-col :span="24">
                 <a @click="handleGoodsChange(index)">
-                  <img :src="item.images" alt="图片" width="100%" height="120px" style="object-fit: cover">
+                  <img :src="item.homeRecommendedImages" alt="图片" height="120px" style="object-fit: cover" width="100%">
                 </a>
               </el-col>
               <el-col :span="24"
@@ -303,9 +306,9 @@
                 <i class="icon-renminbi1688"/>{{ item.price }}
               </el-col>
               <el-col :span="24" style="background-color: #e3ebf1">
-                <el-tooltip class="item" effect="light" :content="item.simpleDesc" placement="top">
-                  <a @click="handleGoodsChange(index)"
-                     style="text-decoration: none; line-height: 20px;color: #1f2327; font-size: xx-small">
+                <el-tooltip :content="item.simpleDesc" class="item" effect="light" placement="top">
+                  <a style="text-decoration: none; line-height: 20px;color: #1f2327; font-size: xx-small"
+                     @click="handleGoodsChange(index)">
                     {{ item.simpleDesc | ellipsis2 }}
                   </a>
                 </el-tooltip>
@@ -314,6 +317,19 @@
           </el-col>
         </el-col>
       </el-col>
+      <el-col :span="24" style="margin-top: 40px">
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+          <el-tab-pane label="宝贝详情" name="first">
+            <el-col :span="24">
+              <img v-for="(item,index) in goodsData.images" :key="index+'images'"
+                   :src="item" object-fit="fill" style="height: 600px;width: 95%;border-radius: 10px"></img>
+            </el-col>
+          </el-tab-pane>
+          <el-tab-pane label="评价" name="second">
+            <user-comment v-bind:props-goods-id="id"></user-comment>
+          </el-tab-pane>
+        </el-tabs>
+      </el-col>
     </el-col>
   </el-row>
 </template>
@@ -321,10 +337,12 @@
 <script>
 import {getRequest, postRequest} from "@/apis/api";
 import Goods from "@/components/goods";
+import Vue from 'vue'
+import userComment from "@/views/comments/userComment";
 
 export default {
   name: "goodsDetiails",
-  components: {Goods},
+  components: {Goods, userComment},
   data() {
     return {
       id: '',
@@ -346,6 +364,7 @@ export default {
       radio1: [],
       provinces: [],
       dialogVisible: [false],
+      activeName: 'first'
     }
   },
   created() {
@@ -409,14 +428,14 @@ export default {
     },
     handleGoodsChange(index) {
       this.goodsData = this.goodsList[index];
-
+      this.goodsData.images = JSON.parse(this.goodsData.images);
+      this.$forceUpdate();
     },
     getData() {
       getRequest("/getGoodsDetilsById?id=" + this.id, {}).then(response => {
             this.goodsData = response.data;
-            console.log(
-                "goodsData:   ", this.goodsData
-            )
+            this.goodsData.images = JSON.parse(this.goodsData.images);
+            console.log("goodsData:   ", this.goodsData)
           }
       ).catch(error => {
         this.$message(error.msg);

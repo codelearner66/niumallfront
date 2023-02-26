@@ -5,16 +5,16 @@
         <el-col :span="24">
           <JwChat-index
               ref="jwChat"
+              v-model="inputMsg"
               :config="config"
               :showRightBox='true'
-              scrollType="scroll"
               :taleList="taleList"
-              @enter="bindEnter"
-              @clickTalk="talkEvent"
-              v-model="inputMsg"
               :toolConfig="tool"
               :winBarConfig="winBarConfig"
-              style="padding-left: 15%">
+              scrollType="scroll"
+              style="padding-left: 15%"
+              @clickTalk="talkEvent"
+              @enter="bindEnter">
             <!--            <template-->
             <!--            slot="header">-->
             <!--              666-->
@@ -25,10 +25,10 @@
                 <!--                <JwChat-icon type="icon-lishi" title="自定义"/>-->
                 <div style="width: 14rem;text-align:center;margin-top: 2rem">
                   <div style="width: 14rem;text-align:center;">
-                    <el-input placeholder="请输入用户昵称或id"
+                    <el-input v-model="searchInput"
                               class="searchClass"
+                              placeholder="请输入用户昵称或id"
                               size="mini"
-                              v-model="searchInput"
                               style="width: 10rem;height: 0.5rem">
                       <i slot="suffix" class="el-icon-search" style="margin-top: 0.3rem;margin-bottom: 0.3rem"
                          @click="handleClick"/>
@@ -37,26 +37,26 @@
 
                   <div style="width: 14rem;margin-top: 1.2rem;">
                     <div v-if="allUserList!==undefined&&allUserList.length!==0">
-                      <JwChat-item style=" border : 1px solid #f2f6f6;
+                      <JwChat-item v-for="(item,index) in allUserList"
+                                   :key="index"
+                                   :config="item"
+                                   :size="30"
+                                   style=" border : 1px solid #f2f6f6;
                     width: 10rem;
                     border-radius: 0.6rem;
                     margin: 0.6rem auto 0;
                     height: 35px;
                     box-shadow:2px 5px 4px 5px rgba(223,227,227,0.99) "
-                                   v-for="(item,index) in allUserList"
-                                   :key="index"
-                                   :config="item"
-                                   :size="30"
                                    @click="changeCurrentUser(item)"/>
                       <!--   点击切换聊天框     -->
 
                       <div style="width: 14rem;margin-top: 1.2rem;">
                         <el-pagination
-                            small
-                            :page-size="10"
                             :current-page="parseInt(allUser.current)"
-                            layout="prev, pager, next"
+                            :page-size="10"
                             :total="parseInt(allUser.total)"
+                            layout="prev, pager, next"
+                            small
                             @current-change="getAllUser">
                         </el-pagination>
                       </div>
@@ -294,8 +294,26 @@ export default {
     toolEvent(type, plyload) {
       console.log('tools', type, plyload)
     },
-    talkEvent(play) {
-      console.log(play)
+    /**
+     * 点击用户消息的回调
+     */
+    talkEvent(play = {}) {
+      console.log("66666", play);
+      // const {type, data = {}} = play
+      // if (type==='systemItem'){
+      //   console.log("快捷键被点击了");
+      //   const msgObj = {
+      //     "date": new Date().toLocaleString(),
+      //     "text": {"text": play.data.text},
+      //     "mine": true,
+      //     "name": localUser.name,
+      //     "img": localUser.img
+      //   }
+      //   currentUser.id=1;
+      //   currentUser.name='NiuMall商城'
+      //   this.taleList.push(msgObj);
+      //   this.sentMessage(msgObj);
+      // }
     },
     /**
      * @description: 点击加载更多的回调函数

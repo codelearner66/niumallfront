@@ -56,7 +56,7 @@
             </el-form-item>
             <el-form-item id="password" prop="e_code" label="验证码" style="margin-top: 35px">
               <el-input v-model="message.e_code" placeholder="请输入验证码">
-                <i slot="suffix" @click.once="getCode(0)" style="font-size: smaller">获取验证码...</i>
+                <i slot="suffix" @click="getCode(0)" style="font-size: smaller">获取验证码...</i>
               </el-input>
             </el-form-item>
             <el-form-item>
@@ -82,7 +82,7 @@
             </el-form-item>
             <el-form-item id="e_code" prop="e_code" label="验证码" style="margin-top: 35px">
               <el-input v-model="email.e_code" placeholder="请输入验证码">
-                <i slot="suffix" class="sendCode" @click.once="getCode(1)" style="font-size: smaller">获取验证码...</i>
+                <i slot="suffix" class="sendCode" @click="getCode(1)" style="font-size: smaller">获取验证码...</i>
               </el-input>
             </el-form-item>
             <el-form-item>
@@ -261,16 +261,53 @@ export default {
       this.kind = n;
     },
     getCode(n) {
-      postRequest(n == 0 ? "/getCode" : "/getMailCode", {
-        phoneNumber: n == 0 ? this.message.phoneNumber : this.email.emailNumber
-      }).then(response => {
-        if (response.code == 200) {
-          this.$message.success("验证码已发送");
-          this.isSend = true;
+      if (this.isSend) {
+        this.$confirm("已经发送过验证码是否继续发送？", "提示", {
+          confirmButtonText: "继续发送",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(() => {
+          this.fun(n);
+        }).catch(() => {
+          this.$message.info("已取消");
+        })
+      } else {
+        this.fun(n);
+      }
+
+    },
+    fun(n) {
+      if (n === 0) {
+        if (this.message.phoneNumber !== "" && this.message.phoneNumber !== undefined) {
+          postRequest("/getCode", {
+            phoneNumber: this.message.phoneNumber
+          }).then(response => {
+            if (response.code === 200) {
+              this.$message.success("验证码已发送");
+              this.isSend = true;
+            }
+          }).catch(reason => {
+            this.$message.success(reason.msg);
+          })
+        } else {
+          return this.$message.error("手机号不能为空");
         }
-      }).catch(reason => {
-        this.$message.success(reason.msg);
-      })
+      } else {
+        if (this.email.emailNumber !== "" && this.email.emailNumber !== undefined) {
+          postRequest("/getMailCode", {
+            phoneNumber: this.email.emailNumber
+          }).then(response => {
+            if (response.code === 200) {
+              this.$message.success("验证码已发送");
+              this.isSend = true;
+            }
+          }).catch(reason => {
+            this.$message.success(reason.msg);
+          })
+        } else {
+          this.$message.error("邮箱不能为空")
+        }
+      }
     }
   }
 };
