@@ -113,7 +113,7 @@
             </el-col>
             <el-col :span="24">
               <!--           购买商品信息-->
-              <span style="font-size: small">{{ item.goodsName }}</span>
+              <span style="font-size: small;color: #3caaef">{{ item.goodsName }}</span>
               <!--            评论日期-->
               <span style="float: right;padding-right: 40px;font-size: small">{{ item.createTime }}</span>
             </el-col>
@@ -121,12 +121,10 @@
         </el-col>
         <el-col :span="12">
           <div class="comment-right">
-            <el-badge :hidden="item.childNum===0" :max="99" :value="item.childNum" class="item">
-              <i
-                  class="el-icon-chat-dot-round"
-                  @click="isShowSecReply('P',item.id)"
-              >回复</i>
-            </el-badge>
+            <i
+                class="el-icon-chat-dot-round"
+                @click="isShowSecReply('P',item.id)"
+            >回复</i>
             &nbsp;
             &nbsp;&nbsp;
             <i
@@ -138,7 +136,7 @@
         </el-col>
         <el-col :span="24">
           <el-col :offset="3" :span="19" style="text-align: left;">
-          <span>
+          <span style="color: #8c939d;font-size: x-small">
             {{ item.goodsDesc }}
           </span>
           </el-col>
@@ -148,11 +146,16 @@
                        style="float: left;margin-left: 10px"></el-avatar>
           </el-col>
         </el-col>
-        <el-col :span="24" Style="height: 10px">
+        <el-col :span="24" Style="height: 10px;font-size: x-small">
+
+
           <a href="JavaScript:void(0)"
              style="float: right;padding-right: 4%;text-decoration: none;color: #dad8d8;font-size: small"
              type="text"
-             @click="showReplies(item.id,index)">查看回复...</a>
+             @click="showReplies(item.id,index)">查看回复...
+            <el-badge style="" :hidden="item.childNum===0" :max="99" :value="item.childNum" class="item"></el-badge>
+          </a>
+
         </el-col>
         <!--      一级评论输入框-->
         <el-col v-show="isShowSec === 'P'+item.id" :span="24" class="reply-comment" style="margin-top: 8px">
@@ -174,9 +177,9 @@
               回复
             </el-button>
             <el-button
-                style="float:  left;margin-left: 16px"
                 class="reply-button"
                 size="mini"
+                style="float:  left;margin-left: 16px"
                 type="info"
                 @click="isShowSecReply">
               关闭
@@ -259,7 +262,8 @@
 
       </el-col>
       <!-- 暂无评论的空状态 -->
-      <el-empty v-show="fullData===undefined||fullData.records===undefined" :description="emptyText"></el-empty>
+      <el-empty v-show="fullData===undefined||fullData.records===undefined||fullData.pages=='0'"
+                :description="emptyText"></el-empty>
     </el-col>
   </div>
 </template>
@@ -273,32 +277,13 @@ export default {
     propsGoodsId: {
       //评论所属文章 id
       type: String
-    },
-    emptyText: {
-      // 评论为空的时候显示的文字
-      type: String,
-      default: "期待你的评论！"
-    },
-    buttonText: {
-      // 按钮文字
-      type: String,
-      default: "评论"
-    },
-    contentLength: {
-      // 评论长度
-      type: Number,
-      default: 150
-    },
-    placeholderText: {
-      // 默认显示文字
-      type: String,
-      default: "请输入最多150字的评论..."
     }
   },
 
   data() {
     return {
       goodsId: undefined,
+      goods: {},
       fullData: {},
       parentPanel: {
         id: '',
@@ -326,6 +311,7 @@ export default {
       imagesfileList: [],
       commentData: {
         goodsId: 101,
+        //todo 商品名称需要指定为本商品
         goodsName: '5566667dfgd',
         isImages: false,
         images: undefined,
@@ -335,11 +321,21 @@ export default {
       rules: {
         goodsRank: [],
         goodsDesc: [],
-      }
+      },
+      emptyText: "期待你的评论！",
+      buttonText: "评论",
+      contentLength: 150,
+      placeholderText: "请输入最多150字的评论..."
     };
   },
   created() {
     this.goodsId = parseInt(this.propsGoodsId);
+    getRequest("/getGoodsDetilsById?id=" + this.goodsId, {}).then(response => {
+          this.goods = response.data;
+        }
+    ).catch(error => {
+      this.$message(error.msg);
+    })
     // 获取评论数据
     this.getCommentList();
   },
@@ -410,6 +406,8 @@ export default {
       getRequest("/isCommented?goodsId=" + this.goodsId).then(response => {
         if (!response.data) {
           this.commentData.goodsId = this.goodsId;
+          this.commentData.goodsName = this.goods.model;
+          console.log(this.commentData)
           postRequest("/addGoodsComment", this.commentData).then(response => {
             if (response.code === 200) {
               this.$message.success("评价成功！");
@@ -530,7 +528,6 @@ export default {
       console.log("商品id  下标 ", id, index);
       var record = this.fullData.records[index];
       var tempData = {
-        //todo 商品类型应该动态指定
         rootId: this.goodsId,
         commentId: id,
         yoursId: record.buyerId,
@@ -543,7 +540,6 @@ export default {
       var record = this.fullData.records[parentIndex];
       var childRecord = record.replies.records[index];
       var tempData = {
-        //todo 商品类型应该动态指定
         rootId: this.goodsId,
         commentId: record.id,
         yoursId: childRecord.userId,

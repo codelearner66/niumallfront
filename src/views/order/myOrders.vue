@@ -7,7 +7,7 @@
         <el-tabs type="border-card">
           <el-tab-pane>
             <span slot="label"><i class="el-icon-suitcase"></i>所有订单</span>
-            <el-col :span="24" style="height: 600px;">
+            <el-col :span="24">
               <order :orders="allOrder.records" :pages="allOrder.current"></order>
             </el-col>
             <el-col :span="24" style="margin-top: 10px">
@@ -22,7 +22,7 @@
           </el-tab-pane>
           <el-tab-pane>
             <span slot="label"><i class="el-icon-suitcase"></i> 未支付</span>
-            <el-col :span="24" style="height: 600px;">
+            <el-col :span="24">
               <order :orders="noPay.records" :pages="noPay.current"></order>
             </el-col>
             <el-col :span="24" style="margin-top: 10px">
@@ -39,7 +39,7 @@
           <span slot="label">
             <i class="el-icon-collection"></i> 已付款
           </span>
-            <el-col :span="24" style="height: 600px;">
+            <el-col :span="24">
               <order :orders="payed.records" :pages="payed.current"></order>
             </el-col>
             <el-col :span="24" style="margin-top: 10px">
@@ -57,7 +57,7 @@
           <span slot="label">
             <i class="el-icon-truck"></i> 待收货
           </span>
-            <el-col :span="24" style="height: 600px;">
+            <el-col :span="24">
               <order :orders="OrderShopped.records" :pages="OrderShopped.current"></order>
             </el-col>
             <el-col :span="24" style="margin-top: 10px">
@@ -75,7 +75,7 @@
           <span slot="label">
             <i class="el-icon-chat-line-square"></i> 退款/售后
           </span>
-            <el-col :span="24" style="height: 600px;">
+            <el-col :span="24">
               <order :orders="OrderProcessing.records" :pages="OrderProcessing.current"></order>
             </el-col>
             <el-col :span="24" style="margin-top: 10px">

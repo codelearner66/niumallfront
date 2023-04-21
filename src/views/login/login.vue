@@ -215,6 +215,8 @@ export default {
             let s = router.currentRoute.query.redirect;
             // console.log("当前路有消息：   ", router.currentRoute);
             router.push(s == undefined ? '/' : s);
+          } else {
+            this.$message.error(respon.msg);
           }
         })
       }
@@ -244,6 +246,8 @@ export default {
               store.commit('increment');
               let s = router.currentRoute.query.redirect;
               router.push(s == undefined ? '/' : s);
+            } else {
+              this.$message.error(respon.msg);
             }
           })
         }

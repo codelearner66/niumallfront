@@ -7,7 +7,7 @@
     </el-col>
     <el-col :span="24" style="margin-top: 15px" v-show="this.goodsListData.length<=0">
       <el-empty description="您搜索的商品不存在......">
-        <el-button type="text" @click="this.$r">返回</el-button>
+        <el-button type="text" @click="goBack">返回</el-button>
       </el-empty>
     </el-col>
     <el-col :span="24" v-show="this.goodsListData.length>0">
@@ -62,6 +62,9 @@ export default {
     pageCurrentChange(currentPage) {
       this.current = currentPage;
       this.getGoodsByKey();
+    },
+    goBack() {
+      this.$router.go(-1);
     }
   }
 }

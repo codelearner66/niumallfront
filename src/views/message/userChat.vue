@@ -110,16 +110,10 @@ export default {
       inputMsg: '',
       taleList: [
         {
-          "date": "2020/04/25 21:19:07",
-          "text": {"text": "起床不"},
-          "mine": false,
-          "name": "留恋人间不羡仙",
-          "img": "../image/one.jpeg"
-        }, {
           "date": "2021/03/02 13:14:21",
           "mine": false,
-          "name": "留恋人间不羡仙",
-          "img": "../image/one.jpeg",
+          "name": "NiuMall商城",
+          "img": require("../../assets/images/header.png"),
           "text": {
             system: {
               title: '在接入人工前，智能助手将为您首次应答。',
@@ -127,15 +121,15 @@ export default {
               content: [
                 {
                   id: `system1`,
-                  text: '组件如何使用'
+                  text: '发货了没'
                 },
                 {
                   id: `system2`,
-                  text: '组件参数在哪里查看'
+                  text: '我的退款进度如何了'
                 },
                 {
                   id: 'system',
-                  text: '我可不可把组件用在商业'
+                  text: '其他问题，人工快来！'
                 }
               ]
             }
@@ -158,8 +152,8 @@ export default {
           callback: this.bindLoadHistory,
         },
         quickList: [
-          {text: '这里是jwchat，您想了解什么问题。'},
-          {text: 'jwchat是最好的聊天组件'},
+          {text: '这里是NiuMall，您想了解什么问题。'},
+          {text: 'NiuMall是最好的聊天组件'},
           {text: '谁将烟焚散，散了纵横的牵绊；听弦断，断那三千痴缠。'},
           {text: '长夏逝去。山野间的初秋悄然涉足。'},
           {text: '江南风骨，天水成碧，天教心愿与身违。'},
@@ -299,21 +293,27 @@ export default {
      */
     talkEvent(play = {}) {
       console.log("66666", play);
-      // const {type, data = {}} = play
-      // if (type==='systemItem'){
-      //   console.log("快捷键被点击了");
-      //   const msgObj = {
-      //     "date": new Date().toLocaleString(),
-      //     "text": {"text": play.data.text},
-      //     "mine": true,
-      //     "name": localUser.name,
-      //     "img": localUser.img
-      //   }
-      //   currentUser.id=1;
-      //   currentUser.name='NiuMall商城'
-      //   this.taleList.push(msgObj);
-      //   this.sentMessage(msgObj);
-      // }
+      const {type, data = {}} = play
+      if (type === 'systemItem') {
+        console.log("快捷键被点击了");
+        const msgObj = {
+          "date": new Date().toLocaleString(),
+          "text": {"text": play.data.text},
+          "mine": true,
+          "name": localUser.name,
+          "img": localUser.img
+        }
+        currentUser.id = 1;
+        if (currentUser.id != localUser.id) {
+          currentUser.name = 'NiuMall商城'
+          this.taleList.push(msgObj);
+          this.sentMessage(msgObj);
+        } else {
+          this.$message.error("不能给自己发消息");
+        }
+
+      }
+
     },
     /**
      * @description: 点击加载更多的回调函数
@@ -425,7 +425,6 @@ export default {
       setTimeout(() => {
         this.getMessageNum();
       }, 300);
-
     },
     getAllUser(pages) {
       getRequest("/websocket/getAllUserList/" + pages, pages).then(success => {

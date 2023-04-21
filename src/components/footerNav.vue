@@ -94,12 +94,11 @@
             隐私协议
           </el-col>
           <el-col :span="16" class="headerspan" style="text-align: center">
-            Copyright © 20022-2022 niumall.COM 桂ICP证666666 版权所有 未经许可 请勿转载
+
           </el-col>
         </el-col>
         <el-col :offset="2" :span="22">
           <el-col :span="5" class="headerspan">
-
             <a href="javascript:void(0)" @click="outerVisible=true" class="router-header">
               <span class="headerspan">用户协议 </span>
             </a>
@@ -108,6 +107,7 @@
             <el-dialog
                 title="用户协议"
                 width="90%"
+                top="40px"
                 :visible.sync="outerVisible">
               <div>
                <pre>
@@ -212,6 +212,15 @@
             </el-dialog>
           </el-col>
         </el-col>
+        <el-col :offset="2" :span="22">
+          <el-col :span="22" class="headerspan" style="text-align: left">
+            Copyright © 20022-2022 niumall.COM 桂ICP证666666 版权所有 未经许可 请勿转载
+          </el-col>
+          <el-col :span="2">
+            &nbsp;
+          </el-col>
+        </el-col>
+
       </el-col>
 
       <el-col :span="7" style="height: 200px;border-left: 1px solid #dedbdb">

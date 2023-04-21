@@ -41,13 +41,16 @@ service.interceptors.response.use(success => {
             localStorage.removeItem("token");
             Cookies.remove("token");
             //如果是首页时 不进行提示
-            if (success.config.url === "/getUserInfor") {
+            console.log(" success.config.url   ", success.config.url);
+            if (success.config.url === "/getUserInfor" || success.config.url === '/getModifyNotification') {
                 return;
             }
             Message.error({message: success.data.msg});
             setTimeout(() => {
                 router.push("/login")
             }, 1000);
+        } else if (success.data.code == 1004) {
+            Message.error({message: success.data.msg});
         } else {
             return success.data;
         }

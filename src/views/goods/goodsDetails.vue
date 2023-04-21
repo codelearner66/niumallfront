@@ -318,7 +318,7 @@
         </el-col>
       </el-col>
       <el-col :span="24" style="margin-top: 40px">
-        <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-tabs v-model="activeName">
           <el-tab-pane label="宝贝详情" name="first">
             <el-col :span="24">
               <img v-for="(item,index) in goodsData.images" :key="index+'images'"
@@ -326,7 +326,7 @@
             </el-col>
           </el-tab-pane>
           <el-tab-pane label="评价" name="second">
-            <user-comment v-bind:props-goods-id="id"></user-comment>
+            <user-comment v-bind:props-goods-id="id" v-bind:props-goods="goodsData"></user-comment>
           </el-tab-pane>
         </el-tabs>
       </el-col>
@@ -471,6 +471,7 @@ export default {
       this.addrRadio = '';
       this.radio1.splice(1, this.radio1.length - 1);
       this.provinces.splice(1, this.provinces.length - 1);
+      this.isNewAddr = !this.isNewAddr
     },
     handleVisible(index, isShow, isContinue) {
       if (index === 0) {

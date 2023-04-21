@@ -28,7 +28,7 @@
           <el-avatar :size="50" :src="headerPath" alt="用户头像" fit="fill" shape="square"></el-avatar>
         </el-col>
         <el-col :span="24" style="margin-top: 20px">
-          <router-link class="main_nav" style="font-size: x-small" to="/myInfor">Hi: {{ this.userInfor.nickName }}
+          <router-link class="main_nav" style="font-size: x-small" to="/myInfo">Hi: {{ this.userInfor.nickName }}
           </router-link>
         </el-col>
         <el-col :span="24" style="margin-top: 20px">

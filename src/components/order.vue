@@ -1,72 +1,76 @@
 <template>
-  <el-row style="height: 600px">
-    <el-col :span="24" v-if="flag"
-            v-loading.fullscreen.lock="flag">
-
-    </el-col>
-    <el-col :span="24" v-if="!flag">
+  <el-row>
+    <el-empty v-if="orders===undefined||orders.length===0" description="这里空空如也了..."></el-empty>
+    <el-col v-else :span="24">
       <el-table
           :data="orders"
-          border
+          style="width: 100%;margin: 0 auto"
           tooltip-effect="light"
-          style="width: 100%;"
-          max-height="600"
-          height="600">
+          @selection-change="handleSelectionChange">
         <el-table-column
-            label="序号"
             align="center"
-            width="100">
+            type="selection"
+            width="50">
+        </el-table-column>
+        <el-table-column
+            align="center"
+            label="宝贝"
+            width="400">
           <template slot-scope="scope">
             <el-col :span="24">
-              {{ (pages - 1) * 10 + scope.$index + 1 }}
+              <el-col :span="24" class="order_header"
+                      style="height: 30px;background-color: #a3e8ca;font-size: xx-small;line-height: 30px">
+                <el-col :span="5" style="float: left">
+                  {{ String(scope.row.createTime).slice(0, 10) }}
+                </el-col>
+                <el-col :span="18" style="float: left;font-size: xx-small;">
+                  <el-tooltip content="点击复制订单号" effect="light" placement="top">
+                    <a style="text-decoration: none;font-size: xx-small;" @click="handleCopy(scope.$index)">
+                      订单号：{{ scope.row.orderId }}
+                    </a>
+                  </el-tooltip>
+
+                </el-col>
+              </el-col>
+              <el-col :span="24" style="margin-top: 4px">
+                <el-col :span="5">
+                  <router-link :to="{name:'goodsDetails',params:{id:scope.row.goodsId}}">
+                    <el-avatar :size="80" :src="goods[scope.$index].homeRecommendedImages" shape="square"></el-avatar>
+                  </router-link>
+                </el-col>
+                <el-col :span="19" style="font-size: xx-small;text-align: left">
+                  <el-col :span="24" style="height: 25px;padding-left: 4px">
+                    <router-link :to="{name:'goodsDetails',params:{id:scope.row.goodsId}}"
+                                 style="text-decoration: none; line-height: 25px;color: #1f2327; font-size: xx-small">
+                      商品名: {{ goods[scope.$index].title }}
+                    </router-link>
+                  </el-col>
+                  <el-col :span="24" style="height: 20px;padding-left: 4px">
+                    型号: {{ goods[scope.$index].model }}
+                  </el-col>
+                  <el-col :span="24" style="height: 20px;padding-left: 4px">
+                    描述: {{ goods[scope.$index].simpleDesc }}
+                  </el-col>
+                </el-col>
+
+              </el-col>
             </el-col>
           </template>
         </el-table-column>
         <el-table-column
-            fixed
-            show-overflow-tooltip
             align="center"
-            label="订单编号"
+            label="单价"
             width="150">
           <template slot-scope="scope">
-            <a style="text-decoration: none" @click="handleCopy(scope.$index)">
-              {{ scope.row.orderId }}
-            </a>
+            <el-col :span="24" style="font-size: xx-small;color: #e83e62">
+              <i class="icon-rmb">{{ goods[scope.$index].price }}</i>
+            </el-col>
           </template>
         </el-table-column>
         <el-table-column
-            label="商品信息"
             align="center"
-            width="220">
-          <template slot-scope="scope">
-            <el-popover trigger="hover" placement="top">
-              <el-col :span="24">
-                <el-col :span="5">
-                  <el-image :src="goods[scope.$index].homeRecommendedImages" style="width: 50px;height: 50px"/>
-                </el-col>
-                <el-col :span="19">
-                  商品名: {{ goods[scope.$index].model }}
-                </el-col>
-              </el-col>
-              <el-col :span="24" style="height: 40px;line-height: 40px;">
-                <el-col :span="5">
-                  简介:
-                </el-col>
-                <el-col :span="18">
-                  {{ goods[scope.$index].simpleDesc }}
-                </el-col>
-              </el-col>
-              <div slot="reference" class="name-wrapper">
-                <el-tag size="medium">{{ goods[scope.$index].model }}</el-tag>
-              </div>
-            </el-popover>
-          </template>
-        </el-table-column>
-
-        <el-table-column
             label="数量"
-            align="center"
-            width="100">
+            width="80">
           <template slot-scope="scope">
             <p>
               {{ scope.row.payment / goods[scope.$index].price }}
@@ -74,114 +78,142 @@
           </template>
         </el-table-column>
         <el-table-column
-            label="支付状态"
             align="center"
-            width="120">
+            label="实付款"
+            width="160">
           <template slot-scope="scope">
             <el-col :span="24">
-              <span style="color: #FF0036">{{ orderStatus[scope.row.orderStatus - 1] }}</span>
-            </el-col>
-          </template>
-        </el-table-column>
-
-        <el-table-column
-            label="支付方式"
-            align="center"
-            width="180">
-          <template slot-scope="scope">
-            <el-col :span="24">
-              <span style="color: rgba(202,69,97,0.84)">{{ payMentType[scope.row.paymentType] }}</span>
-            </el-col>
-          </template>
-        </el-table-column>
-        <el-table-column
-            label="金额"
-            prop="payment"
-            align="center"
-            width="180">
-        </el-table-column>
-        <el-table-column
-            label="地址"
-            align="center"
-            width="250">
-          <el-col :span="24" slot-scope="scope">
-            <el-popover trigger="hover" placement="top">
               <el-col :span="24">
-                <el-col :span="5">
-                  地址:
-                </el-col>
-                <el-col :span="19">
-                  {{ addr[scope.$index].state }}
-                  {{ addr[scope.$index].city }}
-                  {{ addr[scope.$index].district }}
-                  {{ addr[scope.$index].address }}
-                </el-col>
+                <b><i class="icon-rmb" style="font-size: xx-small;color: tomato">{{ scope.row.payment }}</i> </b>
               </el-col>
-              <el-col :span="24" style="height: 40px;line-height: 40px;">
-                <el-col :span="5">
-                  收货人:
-                </el-col>
-                <el-col :span="18">
-                  {{ addr[scope.$index].name }}
-                </el-col>
+              <el-col :span="24">
+                <span style="font-size: xx-small;color: rgba(202,69,97,0.84)">{{
+                    payMentType[scope.row.paymentType]
+                  }}</span>
               </el-col>
-              <el-col :span="24" style="height: 40px;line-height: 40px;">
-                <el-col :span="5">
-                  手机号:
-                </el-col>
-                <el-col :span="18">
-                  {{ addr[scope.$index].mobile }}
-                </el-col>
-              </el-col>
-              <div slot="reference" class="name-wrapper">
-                <el-tag size="medium">
-                  {{ addr[scope.$index].state }}
-                  {{ addr[scope.$index].city }}
-                  {{ addr[scope.$index].district }}
-                  {{ addr[scope.$index].address }}
-                </el-tag>
-              </div>
-            </el-popover>
-          </el-col>
-        </el-table-column>
-
-        <el-table-column
-            label="创建日期"
-            prop="createTime"
-            align="center"
-            width="180">
+            </el-col>
+          </template>
         </el-table-column>
         <el-table-column
-            fixed="right"
-            label="操作"
             align="center"
+            label="交易状态"
+            width="100">
+          <template slot-scope="scope">
+            <el-col :span="24">
+              <span style="color: #FF0036;font-size: xx-small">{{ orderStatus[scope.row.orderStatus - 1] }}</span>
+            </el-col>
+          </template>
+        </el-table-column>
+        <el-table-column
+            align="center"
+            label="订单操作"
             width="150">
           <template slot-scope="scope">
             <!--            支付/取消订单-->
-            <el-col :span="24" v-if="scope.row.orderStatus===1">
-              <el-button @click="handleClick(scope.row)" type="text" size="small">立即支付</el-button>
-              <el-button @click="cancelOrder(scope.row)" type="text" size="small">取消订单</el-button>
+            <el-col v-if="scope.row.orderStatus===1" :span="24">
+              <el-button size="small" type="text" @click="handleClick(scope.row)">立即支付</el-button>
+              <el-button size="small" type="text" @click="cancelOrder(scope.row)">取消订单</el-button>
             </el-col>
             <!--            退款-->
-            <el-col :span="24" v-if="scope.row.orderStatus===2">
-              <el-button @click="refundInfo(scope.row)" type="text" size="small">申请退款</el-button>
+            <el-col v-if="scope.row.orderStatus===2" :span="24">
+              <el-button size="small" type="text" @click="refundInfo(scope.row)">申请退款</el-button>
             </el-col>
             <!--            收获-->
-            <el-col :span="24" v-if="scope.row.orderStatus===3||scope.row.orderStatus===4">
-              <el-button @click="confirmReceipt(scope.row)" type="text" size="small">确认收货</el-button>
+            <el-col v-if="scope.row.orderStatus===3||scope.row.orderStatus===4" :span="24">
+              <el-button size="small" type="text" @click="confirmReceipt(scope.row)">确认收货</el-button>
             </el-col>
             <!--            售后-->
-            <el-col :span="24" v-if="scope.row.orderStatus===8||scope.row.orderStatus===10">
-              <el-button @click="contactService()" type="text" size="small">联系客服</el-button>
+            <el-col v-if="scope.row.orderStatus===8||scope.row.orderStatus===10" :span="24">
+              <el-button size="small" type="text" @click="contactService()">联系客服</el-button>
             </el-col>
-            <el-col :span="24" v-if="scope.row.orderStatus===9">
-              <el-button @click="handleClick(scope.row)" type="text" size="small">完成订单</el-button>
+            <el-col :span="24">
+              <el-button size="small" type="text" @click="viewDetails(scope.row,scope.$index)">其他信息</el-button>
             </el-col>
           </template>
         </el-table-column>
       </el-table>
     </el-col>
-
+    <el-col :span="24">
+      <el-dialog
+          :before-close="handleDialogClose"
+          :visible.sync="flag"
+          title="其他信息"
+          top="50px"
+          width="70%">
+        <el-col v-if="flag" :span="24">
+          <el-col :span="24">
+            <el-col v-show="activeGoods.orderStatus<=5" :span="24">
+              <el-steps :active="activeGoods.orderStatus" align-center finish-status="success">
+                <el-step :description="activeGoods.createTime" title="拍下商品"></el-step>
+                <el-step :description="activeGoods.paymentTime" title="付款成功"></el-step>
+                <el-step :description="activeGoods.consignTime?activeGoods.consignTime:'未发货'" title="卖家发货"></el-step>
+                <el-step :description="activeGoods.endTime?activeGoods.endTime:'未确认收货'" title="确认收获"></el-step>
+                <el-step :description="activeGoods.endTime?activeGoods.endTime:'未收货'" title="交易完成"></el-step>
+              </el-steps>
+            </el-col>
+            <el-col :span="24" style="margin-top: 20px">
+              <el-col :span="8">
+                <el-col :span="24"
+                        style="text-align: left;padding-left: 10px;color: #1f2327;background-color: #c2c9ce;height: 30px;line-height: 30px">
+                  订单信息
+                </el-col>
+                <el-col :span="24" style="border-left: 1px solid #e3e0e3;border-bottom: 1px solid #e3e0e3">
+                  <el-col :span="10">
+                    <el-col :span="24" style="height: 60px;line-height: 60px">
+                      收货地址：
+                    </el-col>
+                    <el-col :span="24" style="height: 40px;font-size: x-small;">
+                      订单编号：
+                    </el-col>
+                    <el-col :span="24" style="height: 40px;font-size: x-small;line-height: 40px">
+                      支付流水：
+                    </el-col>
+                  </el-col>
+                  <!--                  -->
+                  <el-col :span="14">
+                    <el-col v-if="addr.length>0" :span="24" style="height: 60px;font-size: small;padding-top: 5px;">
+                      {{ addr[activeIndex].state }}
+                      {{ addr[activeIndex].city }}
+                      {{ addr[activeIndex].district }}
+                      {{ addr[activeIndex].address }}
+                    </el-col>
+                    <el-col :span="24" style="height: 40px;font-size: x-small;">
+                      {{ orders[activeIndex].orderId }}
+                    </el-col>
+                    <el-col :span="24" style="height: 40px;font-size: x-small;line-height: 40px">
+                      {{ orders[activeIndex].paymentId }}
+                    </el-col>
+                  </el-col>
+                </el-col>
+              </el-col>
+              <el-col :span="16">
+                <el-col :span="24"
+                        style="text-align: left;;color: #1f2327;background-color: #c2c9ce;height: 30px;line-height: 30px;padding-left: 40px">
+                  &nbsp;
+                </el-col>
+                <el-col :span="24" style="border-left: 1px solid #e3e0e3;padding-left: 5px;height: 140px">
+                  <el-col :span="24" style="text-align: left;padding-left: 10%;margin-top: 10px;">
+                    订单状态:
+                    <el-tag type="danger">{{ orderStatus[activeGoods.orderStatus - 1] }}</el-tag>
+                  </el-col>
+                  <el-col :span="24" style="line-height:25px;text-align: left;padding-left: 10%;margin-top: 10px">
+                    快递 <span
+                      style="color: #d35973">{{ activeGoods.shippingName === undefined ? '暂无' : activeGoods.shippingName }}</span>
+                    : {{ activeGoods.shippingCode === undefined ? '暂无' : activeGoods.shippingCode }}
+                  </el-col>
+                  <el-col :span="24" style="line-height:25px;text-align: left;padding-left: 10%;margin-top: 10px">
+                    用户 <span style="color: #d35973">{{ addr[activeIndex].name }}</span> : {{ addr[activeIndex].mobile }}
+                  </el-col>
+                </el-col>
+              </el-col>
+            </el-col>
+          </el-col>
+        </el-col>
+        <span slot="footer" class="dialog-footer">
+           <el-button type="primary" @click="handleDialogClose">关闭</el-button>
+        </span>
+      </el-dialog>
+    </el-col>
   </el-row>
 </template>
 <script>
@@ -193,13 +225,16 @@ export default {
   props: ["orders", 'pages'],
   data() {
     return {
-      flag: true,
+      flag: false,
+      activeIndex: 0,
+      activeGoods: {},
       orderStatus: ['未支付', '已支付', '未发货',
         '已发货', '交易成功', '交易关闭', '用户取消订单',
         '退款中', '已退款', '退款异常'],
       payMentType: ['余额支付', '支付宝支付'],
       goods: [],
       addr: [],
+      multipleSelection: []
     }
   },
   created() {
@@ -232,11 +267,13 @@ export default {
         })
       }
     }, 100)
-    setTimeout(() => {
-      this.flag = false;
-    }, 800)
   },
   methods: {
+    handleSelectionChange(val) {
+      // this.multipleSelection 缓存的是订单信息
+      this.multipleSelection = val;
+      // console.log("this.multipleSelection:  ",this.multipleSelection);
+    },
     //重新支付
     handleClick(item) {
       console.log("item===========>", item);
@@ -328,6 +365,15 @@ export default {
     },
     contactService() {
       router.push("message");
+    },
+    viewDetails(item, index) {
+      this.activeGoods = item;
+      this.activeIndex = index;
+      console.log("this.activeGoods: ", this.addr[index])
+      this.handleDialogClose();
+    },
+    handleDialogClose() {
+      this.flag = !this.flag;
     }
   }
 }

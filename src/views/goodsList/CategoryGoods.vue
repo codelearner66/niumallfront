@@ -5,7 +5,7 @@
               style="max-height: 300px;height: 100px;border: 1px solid #aaca;padding: 5px 5px 5px 5px">
         <el-col :span="2"><span style="color: tomato;font-size: medium;padding-left: 10px;">品牌: </span></el-col>
         <el-col :span="20">
-          <el-checkbox-group v-model="checkedCategory" size="small">
+          <el-checkbox-group v-model="checkedCategory" @change="handleCheckboxGroupChange" size="small">
             <el-tooltip class="item" effect="light" :content="item.goodsCategoryDescribe" placement="top"
                         v-for="(item,index) in childrenData" :key="index">
               <el-checkbox :label="item.id" style="margin-top: 2px;margin-bottom: 4px" border>
@@ -116,6 +116,10 @@ export default {
       }).catch(error => {
         this.$message(error.msg)
       })
+    },
+    handleCheckboxGroupChange(val) {
+      console.log(val, "接收到的改变数据");
+      this.handleChecked();
     },
     handleChecked() {
       this.flag = true;
